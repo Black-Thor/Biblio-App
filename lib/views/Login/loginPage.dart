@@ -1,5 +1,8 @@
+import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import '../Register/registerPage.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -30,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
             )),
           ),
           Container(
-            height: deviceWidth * 0.65,
+            height: deviceWidth * 0.90,
             width: double.infinity,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: LayoutBuilder(builder: (context, constraints) {
@@ -49,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: constraints.maxHeight * 0.08,
                   ),
                   Container(
-                    height: constraints.maxHeight * 0.11,
+                    height: constraints.maxHeight * 0.15,
                     decoration: BoxDecoration(
                       color: const Color(0xffB4B4B4).withOpacity(0.4),
                       borderRadius: BorderRadius.circular(16),
@@ -69,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: constraints.maxHeight * 0.02,
                   ),
                   Container(
-                    height: constraints.maxHeight * 0.11,
+                    height: constraints.maxHeight * 0.15,
                     decoration: BoxDecoration(
                       color: const Color(0xffB4B4B4).withOpacity(0.4),
                       borderRadius: BorderRadius.circular(16),
@@ -104,10 +107,10 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       TextButton(
                           onPressed: () {},
-                          child: Text(
+                          child: const Text(
                             'Forgot password ? ',
                             style: TextStyle(
-                              color: Color(0xffF80849),
+                              color: Color(0xff0092A2),
                             ),
                           ))
                     ],
@@ -119,14 +122,19 @@ class _LoginPageState extends State<LoginPage> {
                       top: constraints.maxHeight * 0.01,
                     ),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BookPage()));
+                      },
                       child: Text(
                         'Login',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 22),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xffF80849),
+                        primary: Color(0xff0092A2),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(28),
                         ),
@@ -134,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(
-                    height: constraints.maxHeight * 0.02,
+                    height: constraints.maxHeight * 0.05,
                   ),
                   RichText(
                       text: TextSpan(
@@ -147,10 +155,17 @@ class _LoginPageState extends State<LoginPage> {
                         TextSpan(
                             text: 'Register',
                             style: const TextStyle(
-                              color: Color(0xffF80849),
+                              color: Color(0xff0092A2),
                               fontSize: 18,
                             ),
-                            recognizer: TapGestureRecognizer()..onTap = () {}),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            RegistrationPage()));
+                              }),
                       ]))
                 ],
               );
