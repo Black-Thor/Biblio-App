@@ -1,3 +1,4 @@
+import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -12,7 +13,8 @@ class _BookPageState extends State<BookPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column() ,
+      appBar: CustomAppBar(context),
+      body: Column(),
     );
   }
 }
