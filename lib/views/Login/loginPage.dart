@@ -1,4 +1,5 @@
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
+import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           Container(
-            
             height: deviceHeight * 0.30,
             child: Container(
                 child: Container(

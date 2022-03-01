@@ -1,3 +1,4 @@
+import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:bibliotrack/views/user/userPage.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +19,14 @@ class CustomAppBar extends AppBar {
           ),
           elevation: 0.0,
           automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () => null,
-          ),
+          // leading: IconButton(
+          //   icon: Icon(Icons.menu),
+          //   onPressed: () => CustomSideBar(),
+          // ),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.notifications),
-              onPressed: () => null,
+              onPressed: () {},
             ),
             IconButton(
               icon: Icon(Icons.person),

@@ -3,20 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 
-class BookPage extends StatefulWidget {
-  BookPage({Key? key}) : super(key: key);
+class testPage extends StatefulWidget {
+  testPage({Key? key}) : super(key: key);
 
   @override
-  State<BookPage> createState() => _BookPageState();
+  State<testPage> createState() => _testPageState();
 }
 
-class _BookPageState extends State<BookPage> {
+class _testPageState extends State<testPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(context),
-      drawer: CustomSideBar(),
+      appBar: AppBar(
+        title: const Text("appBar"),
+      ),
       body: Column(),
+      //drawer: CustomSideBar(),
     );
   }
 }
