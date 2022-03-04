@@ -4,7 +4,7 @@ import 'package:bibliotrack/views/user/userPage.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends AppBar {
-  CustomAppBar(context, {Key? key})
+  CustomAppBar(Page, context, GlobalKey<ScaffoldState> skey, {Key? key})
       : super(
           key: key,
           iconTheme: IconThemeData(
@@ -12,22 +12,20 @@ class CustomAppBar extends AppBar {
           ),
           backgroundColor: Color(0xff0092A2),
           title: Text(
-            "Bienvenue $context",
+            "Bienvenue dans vos $Page",
             style: TextStyle(
               color: Colors.white,
             ),
           ),
           elevation: 0.0,
           automaticallyImplyLeading: false,
-          // leading: IconButton(
-          //   icon: Icon(Icons.menu),
-          //   onPressed: () => CustomSideBar(),
-          // ),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              skey.currentState!.openDrawer();
+            },
+          ),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {},
-            ),
             IconButton(
               icon: Icon(Icons.person),
               onPressed: () {

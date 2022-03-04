@@ -1,8 +1,19 @@
+import 'dart:io';
+
+import 'package:bibliotrack/views/bookPage/comicsPages.dart';
+import 'package:bibliotrack/views/bookPage/bookPage.dart';
+import 'package:bibliotrack/views/bookPage/mangaPage.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class CustomSideBar extends StatelessWidget {
-  const CustomSideBar({Key? key}) : super(key: key);
+class CustomSideBar extends StatefulWidget {
+  @override
+  State<CustomSideBar> createState() => _CustomSideBarState();
+}
 
+class _CustomSideBarState extends State<CustomSideBar> {
+  // const CustomSideBar({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -12,44 +23,58 @@ class CustomSideBar extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: Text('Oflutter.com'),
             accountEmail: Text('example@gmail.com'),
-            currentAccountPicture: CircleAvatar(
-              child: ClipOval(
-                child: Image.network(
-                  'https://oflutter.com/wp-content/uploads/2021/02/girl-profile.png',
-                  fit: BoxFit.cover,
-                  width: 90,
-                  height: 90,
-                ),
-              ),
-            ),
             decoration: BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: NetworkImage(
-                      'https://oflutter.com/wp-content/uploads/2021/02/profile-bg3.jpg')),
+                fit: BoxFit.fill,
+                image: AssetImage('assets/images/sidebar.jpg'),
+              ),
             ),
           ),
           ListTile(
             leading: Icon(Icons.menu_book),
             title: Text('Livres'),
-            onTap: () => null,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => BookPage()));
+            },
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('BD'),
-            onTap: () => null,
+            title: Text('BD / Comics'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => ComicsPage()));
+            },
           ),
           ListTile(
             leading: Icon(Icons.share),
-            title: Text('Comics'),
-            onTap: () => null,
+            title: Text('Manga'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => MangaPages()));
+            },
+          ),
+          Divider(
+            thickness: 2,
+            indent: 20,
+            endIndent: 20,
+            color: Color.fromARGB(255, 94, 103, 104),
           ),
           ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text('Manga'),
+            leading: Icon(Icons.wallet_giftcard_rounded),
+            title: Text('WhishList'),
+            onTap: () => null,
           ),
-          Divider(),
+          Divider(
+            thickness: 2,
+            indent: 20,
+            endIndent: 20,
+            color: Color.fromARGB(255, 94, 103, 104),
+          ),
           ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
@@ -60,14 +85,27 @@ class CustomSideBar extends StatelessWidget {
             title: Text('Policies'),
             onTap: () => null,
           ),
-          Divider(),
+          Divider(
+            thickness: 2,
+            indent: 20,
+            endIndent: 20,
+            color: Color.fromARGB(255, 94, 103, 104),
+          ),
           ListTile(
             title: Text('Exit'),
             leading: Icon(Icons.exit_to_app),
-            onTap: () => null,
+            onTap: () => exitApp(),
           ),
         ],
       ),
     );
+  }
+}
+
+exitApp() {
+  if (Platform.isAndroid) {
+    SystemNavigator.pop();
+  } else if (Platform.isIOS) {
+    exit(0);
   }
 }

@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 
-class BookPage extends StatefulWidget {
-  BookPage({Key? key}) : super(key: key);
+class MangaPages extends StatefulWidget {
+  MangaPages({Key? key}) : super(key: key);
 
   @override
-  State<BookPage> createState() => _BookPageState();
+  State<MangaPages> createState() => _MangaPagesState();
 }
 
-class _BookPageState extends State<BookPage> {
+class _MangaPagesState extends State<MangaPages> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    String Page = "Livres";
+    String Page = "Manga";
     return Scaffold(
       key: _key,
       extendBodyBehindAppBar: true,
