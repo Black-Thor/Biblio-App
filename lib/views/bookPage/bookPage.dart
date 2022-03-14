@@ -21,8 +21,41 @@ class _BookPageState extends State<BookPage> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(Page, context, _key),
       drawer: CustomSideBar(),
-      body: Column(),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 108.0),
+        child: Container(
+          height: 150,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              buildCard(),
+              SizedBox(
+                width: 12,
+              ),
+              buildCard(),
+              SizedBox(
+                width: 12,
+              ),
+              buildCard(),
+              SizedBox(
+                width: 12,
+              ),
+              buildCard(),
+              SizedBox(
+                width: 12,
+              ),
+            ],
+          ),
+        ),
+      ),
       floatingActionButton: addButton(),
     );
   }
+
+  Widget buildCard() => Container(
+        width: 200,
+        height: 200,
+        color: Colors.red,
+      );
 }
+

@@ -16,6 +16,9 @@ class addButton extends StatelessWidget {
   }
 }
 
+/**
+ * à refacto
+ */
 _addingModalTab(context) {
   showDialog(
       context: context,
