@@ -1,35 +1,103 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget bookCard() {
-  return Container(
-    height: 150,
-    child: ListView(
-      scrollDirection: Axis.horizontal,
+class bookCard extends StatefulWidget {
+  const bookCard({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<bookCard> createState() => _bookCardState();
+}
+
+class _bookCardState extends State<bookCard> {
+  late PageController _pageController;
+
+  List<String> images = [
+    "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
+    "https://wallpaperaccess.com/full/2637581.jpg",
+    "https://static.wikia.nocookie.net/headhuntersholosuite/images/7/77/Suicide_Squad%2C_The.jpg/revision/latest?cb=20210807172814",
+    "https://www.moviepostersgallery.com/wp-content/uploads/2020/08/Blackwidow2.jpg",
+    "https://uhdwallpapers.org/uploads/converted/20/01/14/the-mandalorian-5k-1920x1080_477555-mm-90.jpg"
+  ];
+
+  int activePage = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.8, initialPage: 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       children: [
-        buildCard(),
         SizedBox(
-          width: 12,
+          width: MediaQuery.of(context).size.width,
+          height: 200,
+          child: PageView.builder(
+              itemCount: images.length,
+              pageSnapping: true,
+              controller: _pageController,
+              onPageChanged: (page) {
+                setState(() {
+                  activePage = page;
+                });
+              },
+              itemBuilder: (context, pagePosition) {
+                bool active = pagePosition == activePage;
+                return slider(images, pagePosition, active);
+              }),
         ),
-        buildCard(),
-        SizedBox(
-          width: 12,
-        ),
-        buildCard(),
-        SizedBox(
-          width: 12,
-        ),
-        buildCard(),
-        SizedBox(
-          width: 12,
-        ),
+        Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: indicators(images.length, activePage))
       ],
+    );
+  }
+}
+
+AnimatedContainer slider(images, pagePosition, active) {
+  double margin = active ? 10 : 20;
+
+  return AnimatedContainer(
+    duration: Duration(milliseconds: 500),
+    curve: Curves.easeInOutCubic,
+    margin: EdgeInsets.all(margin),
+    decoration: BoxDecoration(
+        image: DecorationImage(image: NetworkImage(images[pagePosition]))),
+  );
+}
+
+imageAnimation(PageController animation, images, pagePosition) {
+  return AnimatedBuilder(
+    animation: animation,
+    builder: (context, widget) {
+      print(pagePosition);
+
+      return SizedBox(
+        width: 200,
+        height: 200,
+        child: widget,
+      );
+    },
+    child: Container(
+      margin: EdgeInsets.all(10),
+      child: Image.network(images[pagePosition]),
     ),
   );
 }
 
-Widget buildCard() => Container(
-      width: 200,
-      height: 200,
-      color: Colors.red,
+List<Widget> indicators(imagesLength, currentIndex) {
+  return List<Widget>.generate(imagesLength, (index) {
+    return Container(
+      margin: EdgeInsets.all(3),
+      width: 10,
+      height: 10,
+      decoration: BoxDecoration(
+          color: currentIndex == index ? Colors.black : Colors.black26,
+          shape: BoxShape.circle),
     );
+  });
+}

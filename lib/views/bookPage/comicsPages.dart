@@ -1,4 +1,5 @@
 import 'package:bibliotrack/widget/addingButton.dart';
+import 'package:bibliotrack/widget/cardScroll.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -21,7 +22,10 @@ class _ComicsPageState extends State<ComicsPage> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(Page, context, _key),
       drawer: CustomSideBar(),
-      body: Column(),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 100),
+        child: bookCard(),
+      ),
       floatingActionButton: addButton(),
     );
   }

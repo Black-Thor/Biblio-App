@@ -1,8 +1,13 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/views/Login/loginPage.dart';
+import 'package:bibliotrack/views/Register/registerPage.dart';
 import 'package:bibliotrack/views/bookPage/comicsPages.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:bibliotrack/views/bookPage/mangaPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,8 +17,30 @@ class CustomSideBar extends StatefulWidget {
   State<CustomSideBar> createState() => _CustomSideBarState();
 }
 
+String? emailReturned;
+String? test;
+Future userInfo() async {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    if (user == null) {
+      print('User is currently signed out!');
+    } else {
+      emailReturned = _auth.currentUser?.email;
+      print(_auth.currentUser);
+    }
+  });
+  return emailReturned;
+}
+
 class _CustomSideBarState extends State<CustomSideBar> {
   // const CustomSideBar({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -22,7 +49,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
         children: [
           UserAccountsDrawerHeader(
             accountName: Text('Oflutter.com'),
-            accountEmail: Text('example@gmail.com'),
+            accountEmail: Text("${emailReturned}"),
             decoration: BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
@@ -35,6 +62,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
             leading: Icon(Icons.menu_book),
             title: Text('Livres'),
             onTap: () {
+              userInfo();
               Navigator.pop(context);
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BookPage()));
@@ -94,7 +122,10 @@ class _CustomSideBarState extends State<CustomSideBar> {
           ListTile(
             title: Text('Exit'),
             leading: Icon(Icons.exit_to_app),
-            onTap: () => exitApp(),
+            onTap: () {
+              exitApp(context);
+              MaterialPageRoute(builder: (context) => LoginPage());
+            },
           ),
         ],
       ),
@@ -102,10 +133,24 @@ class _CustomSideBarState extends State<CustomSideBar> {
   }
 }
 
-exitApp() {
-  if (Platform.isAndroid) {
-    SystemNavigator.pop();
-  } else if (Platform.isIOS) {
-    exit(0);
-  }
+exitApp(BuildContext context) async {
+  // if (Platform.isAndroid) {
+  //   SystemNavigator.pop();
+  // } else if (Platform.isIOS) {
+  //   exit(0);
+  // }
+  AuthenticationHelper().signOut().then((result) {
+    if (result == null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          result,
+          style: TextStyle(fontSize: 16),
+        ),
+      ));
+    }
+  });
+  ;
 }

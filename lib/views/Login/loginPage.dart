@@ -1,8 +1,9 @@
+import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../Register/registerPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,6 +15,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var _isVisible = false;
+  final email = TextEditingController();
+  final password = TextEditingController();
+  
+
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
@@ -58,10 +63,11 @@ class _LoginPageState extends State<LoginPage> {
                       color: const Color(0xffB4B4B4).withOpacity(0.4),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.only(left: 15.0),
                       child: Center(
                         child: TextField(
+                          controller: email,
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'test@gmail.com'),
@@ -82,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: EdgeInsets.only(left: 15.0),
                       child: Center(
                         child: TextField(
+                          controller: password,
                           obscureText: _isVisible ? false : true,
                           decoration: InputDecoration(
                             suffixIcon: IconButton(
@@ -124,10 +131,25 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BookPage()));
+// Get username and password from the user.Pass the data to
+// helper method
+                        AuthenticationHelper()
+                            .signIn(email: email.text, password: password.text)
+                            .then((result) {
+                          if (result == null) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BookPage()));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                result,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ));
+                          }
+                        });
                       },
                       child: Text(
                         'Login',
