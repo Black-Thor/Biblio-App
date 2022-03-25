@@ -1,17 +1,17 @@
 import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class RegistrationPage extends StatefulWidget {
+class forgetPassword extends StatefulWidget {
+  forgetPassword({Key? key}) : super(key: key);
+
   @override
-  _RegistrationPageState createState() => _RegistrationPageState();
+  State<forgetPassword> createState() => _forgetPasswordState();
 }
 
-final email = TextEditingController();
-final password = TextEditingController();
-final nickName = TextEditingController();
-
-class _RegistrationPageState extends State<RegistrationPage> {
+class _forgetPasswordState extends State<forgetPassword> {
+  final emailToReset = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,15 +24,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 Container(
                   padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
                   child: Text(
-                    'Signup',
+                    'Forgot password',
                     style:
                         TextStyle(fontSize: 80.0, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(260.0, 125.0, 0.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(15.0, 298.0, 1.0, 0.0),
                   child: Text(
-                    '.',
+                    '?',
                     style: TextStyle(
                         fontSize: 80.0,
                         fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               child: Column(
                 children: <Widget>[
                   TextField(
-                    controller: email,
+                    controller: emailToReset,
                     decoration: InputDecoration(
                         labelText: 'EMAIL',
                         labelStyle: TextStyle(
@@ -59,35 +59,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Color(0xff0092A2)))),
                   ),
-                  SizedBox(height: 10.0),
-                  TextField(
-                    controller: password,
-                    decoration: InputDecoration(
-                        labelText: 'PASSWORD ',
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xff0092A2)))),
-                    obscureText: true,
-                  ),
-                  SizedBox(height: 10.0),
-                  TextField(
-                    controller: nickName,
-                    decoration: InputDecoration(
-                        labelText: 'NICK NAME ',
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xff0092A2)))),
-                  ),
                   SizedBox(height: 50.0),
                   Container(
                       width: double.infinity,
                       height: 45,
+                      // margin: EdgeInsets.only(
+                      //   top: constraints.maxHeight * 0.01,
+                      // ),
                       child: Material(
                         borderRadius: BorderRadius.circular(20.0),
                         shadowColor: Colors.greenAccent,
@@ -103,28 +81,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           child: ElevatedButton(
                             onPressed: () {
                               AuthenticationHelper()
-                                  .signUp(
-                                      email: email.text,
-                                      password: password.text)
-                                  .then((result) {
-                                if (result == null) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => BookPage()));
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text(
-                                      result,
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ));
-                                }
-                              });
+                                  .passwordReset(emailToReset.text, context);
                             },
                             child: Text(
-                              'SIGNUP',
+                              'Reset Password',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,

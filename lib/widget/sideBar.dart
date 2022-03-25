@@ -34,12 +34,6 @@ Future userInfo() async {
 
 class _CustomSideBarState extends State<CustomSideBar> {
   // const CustomSideBar({Key? key}) : super(key: key);
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    userInfo();
-  }
 
   @override
   Widget build(BuildContext context) {

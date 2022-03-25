@@ -1,4 +1,5 @@
 import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/views/Login/forgetPassword.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:flutter/gestures.dart';
@@ -17,7 +18,12 @@ class _LoginPageState extends State<LoginPage> {
   var _isVisible = false;
   final email = TextEditingController();
   final password = TextEditingController();
-  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AuthenticationHelper().Logged(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +120,12 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => forgetPassword()));
+                          },
                           child: const Text(
                             'Forgot password ? ',
                             style: TextStyle(

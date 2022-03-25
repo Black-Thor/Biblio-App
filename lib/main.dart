@@ -6,7 +6,9 @@ import 'package:flutter/services.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(
+  runApp(
+    
+    MaterialApp(
     title: "Biblio-Track",
     home: LoginPage(),
     debugShowCheckedModeBanner: false,

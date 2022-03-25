@@ -14,6 +14,14 @@ class BookPage extends StatefulWidget {
 class _BookPageState extends State<BookPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //userInfo si for sidebar data
+    userInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     String Page = "Livres";
     return Scaffold(
@@ -58,4 +66,3 @@ class _BookPageState extends State<BookPage> {
         color: Colors.red,
       );
 }
-

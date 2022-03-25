@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +36,6 @@ class AuthenticationHelper {
   //SIGN OUT METHOD
   Future signOut() async {
     await _auth.signOut();
-
     print('signout');
   }
 
@@ -48,6 +50,38 @@ class AuthenticationHelper {
       }
     });
   }
+  //Password forget
 
-  
+  Future passwordReset(email, context) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 2),
+        content: Text(
+          "A email was send for Reset",
+          style: TextStyle(fontSize: 16),
+        ),
+      ));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          e.toString(),
+          style: TextStyle(fontSize: 16),
+        ),
+      ));
+    }
+  }
+
+  Future Logged(context) async {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => BookPage()));
+      }
+    });
+  }
 }
