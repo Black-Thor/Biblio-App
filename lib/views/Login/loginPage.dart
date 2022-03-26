@@ -1,11 +1,18 @@
+import 'dart:developer';
+
 import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/views/Login/forgetPasswordLink.dart';
+import 'package:bibliotrack/views/Login/input.dart';
+import 'package:bibliotrack/views/Login/emailTextField.dart';
 import 'package:bibliotrack/views/Login/forgetPassword.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import '../Register/registerPage.dart';
+import 'passwordTextField.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -15,15 +22,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var _isVisible = false;
-  final email = TextEditingController();
-  final password = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     AuthenticationHelper().Logged(context);
   }
+
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Container(
             height: deviceHeight * 0.30,
-            child: Container(
-                child: Container(
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage('assets/images/Logo.png'),
-              )),
-            )),
+            child: logo,
           ),
           Container(
             height: deviceWidth * 0.90,
@@ -52,88 +53,21 @@ class _LoginPageState extends State<LoginPage> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Login Now',
-                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: constraints.maxHeight * 0.01,
-                  ),
-                  const Text('Please enter the details below to continue'),
-                  SizedBox(
-                    height: constraints.maxHeight * 0.08,
-                  ),
-                  Container(
-                    height: constraints.maxHeight * 0.15,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffB4B4B4).withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 15.0),
-                      child: Center(
-                        child: TextField(
-                          controller: email,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'test@gmail.com'),
-                        ),
-                      ),
-                    ),
-                  ),
+                  ...welcome(constraints),
+                  // input(emailTextField(), constraints),
+                  Input(
+                      constraints: constraints,
+                      textField:
+                          EmailTextField(controller: emailTextController)),
                   SizedBox(
                     height: constraints.maxHeight * 0.02,
                   ),
-                  Container(
-                    height: constraints.maxHeight * 0.15,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffB4B4B4).withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 15.0),
-                      child: Center(
-                        child: TextField(
-                          controller: password,
-                          obscureText: _isVisible ? false : true,
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _isVisible = !_isVisible;
-                                  });
-                                },
-                                icon: Icon(
-                                  _isVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Colors.grey,
-                                )),
-                            border: InputBorder.none,
-                            hintText: 'Password',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => forgetPassword()));
-                          },
-                          child: const Text(
-                            'Forgot password ? ',
-                            style: TextStyle(
-                              color: Color(0xff0092A2),
-                            ),
-                          ))
-                    ],
-                  ),
+                  Input(
+                      constraints: constraints,
+                      textField: PasswordTextField(
+                        controller: passwordTextController,
+                      )),
+                  const ForgetPasswordLink(),
                   Container(
                     width: double.infinity,
                     height: constraints.maxHeight * 0.11,
@@ -141,27 +75,8 @@ class _LoginPageState extends State<LoginPage> {
                       top: constraints.maxHeight * 0.01,
                     ),
                     child: ElevatedButton(
-                      onPressed: () {
-// Get username and password from the user.Pass the data to
-// helper method
-                        AuthenticationHelper()
-                            .signIn(email: email.text, password: password.text)
-                            .then((result) {
-                          if (result == null) {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BookPage()));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                result,
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ));
-                          }
-                        });
-                      },
+                      onPressed: () => submitLoginForm(emailTextController.text,
+                          passwordTextController.text, context),
                       child: Text(
                         'Login',
                         style: TextStyle(
@@ -178,29 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: constraints.maxHeight * 0.05,
                   ),
-                  RichText(
-                      text: TextSpan(
-                          text: 'Don\'t have an Account ',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                          children: [
-                        TextSpan(
-                            text: 'Register',
-                            style: const TextStyle(
-                              color: Color(0xff0092A2),
-                              fontSize: 18,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            RegistrationPage()));
-                              }),
-                      ]))
+                  accessRegisterForm(context),
                 ],
               );
             }),
@@ -209,4 +102,73 @@ class _LoginPageState extends State<LoginPage> {
       ),
     ));
   }
+}
+
+final logo = Container(
+    child: Container(
+  decoration: const BoxDecoration(
+      image: DecorationImage(
+    image: AssetImage('assets/images/Logo.png'),
+  )),
+));
+
+welcome(constraints) {
+  return [
+    const Text(
+      'Login Now',
+      style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+    ),
+    SizedBox(
+      height: constraints.maxHeight * 0.01,
+    ),
+    const Text('Please enter the details below to continue'),
+    SizedBox(
+      height: constraints.maxHeight * 0.08,
+    ),
+  ];
+}
+
+submitLoginForm(String email, String password, BuildContext context) {
+  // Get username and password from the user.Pass the data to
+  // helper method
+  AuthenticationHelper()
+      .signIn(email: email, password: password)
+      .then((result) {
+    if (result == null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => BookPage()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          result,
+          style: TextStyle(fontSize: 16),
+        ),
+      ));
+    }
+  });
+}
+
+accessRegisterForm(context) {
+  return RichText(
+      text: TextSpan(
+          text: 'Don\'t have an Account ',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+          ),
+          children: [
+        TextSpan(
+            text: 'Register',
+            style: const TextStyle(
+              color: Color(0xff0092A2),
+              fontSize: 18,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RegistrationPage()));
+              }),
+      ]));
 }
