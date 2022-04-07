@@ -1,6 +1,9 @@
 import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../utils/firestore.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -75,7 +78,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   SizedBox(height: 10.0),
                   TextField(
                     controller: nickName,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: 'NICK NAME ',
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
@@ -106,8 +109,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   .signUp(
                                       email: email.text,
                                       password: password.text)
-                                  .then((result) {
+                                  .then((result) async {
                                 if (result == null) {
+                                  var user =
+                                      await FirebaseAuth.instance.currentUser!;
+                                  var uid = user.uid;
+                                  print(uid);
+                                  collectionHelper().addUser(
+                                      uid: uid,
+                                      username: nickName.text.toString());
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(

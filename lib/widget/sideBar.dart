@@ -2,11 +2,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/utils/firestore.dart';
 import 'package:bibliotrack/views/Login/loginPage.dart';
 import 'package:bibliotrack/views/Register/registerPage.dart';
 import 'package:bibliotrack/views/bookPage/comicsPages.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:bibliotrack/views/bookPage/mangaPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
@@ -34,6 +36,12 @@ Future userInfo() async {
 
 class _CustomSideBarState extends State<CustomSideBar> {
   // const CustomSideBar({Key? key}) : super(key: key);
+  String uid = AuthenticationHelper().getUid().toString();
+
+  getUsername() {
+    var username = collectionHelper().getDoc();
+    print(username);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +50,9 @@ class _CustomSideBarState extends State<CustomSideBar> {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('Oflutter.com'),
+            accountName: Text("test"),
             accountEmail: Text("${emailReturned}"),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
                 fit: BoxFit.fill,
@@ -53,10 +61,14 @@ class _CustomSideBarState extends State<CustomSideBar> {
             ),
           ),
           ListTile(
+            title: Text('test'),
+            onTap: () => getUsername(),
+          ),
+          ListTile(
             leading: Icon(Icons.menu_book),
             title: Text('Livres'),
             onTap: () {
-              userInfo();
+              //userInfo();
               Navigator.pop(context);
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BookPage()));

@@ -1,3 +1,5 @@
+import 'package:bibliotrack/widget/sideBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
@@ -59,7 +61,8 @@ class ProfilePage extends StatelessWidget {
                       hintText: 'Username',
                     ),
                     textfield(
-                      hintText: 'Email',
+                      hintText: "$emailReturned",
+                      
                     ),
                     textfield(
                       hintText: 'Password',

@@ -23,6 +23,12 @@ class AuthenticationHelper {
     }
   }
 
+  String getUid() {
+    var user = FirebaseAuth.instance.currentUser!;
+    var uid = user.uid;
+    return uid;
+  }
+
   //SIGN IN METHOD
   Future signIn({required String email, required String password}) async {
     try {
@@ -31,6 +37,11 @@ class AuthenticationHelper {
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
+  }
+
+  Future getCurrentUser() async {
+    print(_auth.currentUser?.uid);
+    return _auth.currentUser?.uid;
   }
 
   //SIGN OUT METHOD
@@ -55,8 +66,8 @@ class AuthenticationHelper {
   Future passwordReset(email, context) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: const Duration(seconds: 2),
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        duration: Duration(seconds: 2),
         content: Text(
           "A email was send for Reset",
           style: TextStyle(fontSize: 16),
@@ -68,7 +79,7 @@ class AuthenticationHelper {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           e.toString(),
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
         ),
       ));
     }
