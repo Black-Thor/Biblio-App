@@ -1,15 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/utils/firestore.dart';
 import 'package:bibliotrack/widget/addingButton.dart';
-import 'package:bibliotrack/widget/cardScroll.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 
 class ComicsPage extends StatefulWidget {
@@ -35,7 +31,6 @@ class _ComicsPageState extends State<ComicsPage> {
           Padding(padding: EdgeInsets.only(top: 75)),
           ElevatedButton(
             onPressed: () async {
-
               CollectionReference users =
                   FirebaseFirestore.instance.collection('users');
 

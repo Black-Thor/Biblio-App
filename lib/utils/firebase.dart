@@ -106,4 +106,14 @@ class AuthenticationHelper {
     });
     return emailReturned;
   }
+
+  String getEmail() {
+    String useremail = "empty";
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // Name, email address, and profile photo URL
+      useremail = user.email!;
+    }
+    return useremail;
+  }
 }

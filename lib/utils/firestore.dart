@@ -31,8 +31,6 @@ class CollectionHelper {
         .where('username', isEqualTo: '${username}')
         .get();
   }
-
-
 }
 
 class GetUserName extends StatelessWidget {
@@ -69,8 +67,6 @@ class GetUserName extends StatelessWidget {
   }
 }
 
-
-
 class finduser extends StatelessWidget {
   final String username;
 
@@ -105,11 +101,5 @@ class finduser extends StatelessWidget {
   }
 }
 
-class MyClass {
-  final String username;
-
-  const MyClass({required this.username});
-
-  factory MyClass.fromJson(Map<String, dynamic> json) =>
-      MyClass(username: json['username'] as String);
-}
+// AuthenticationHelper().getEmail()
+// style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),

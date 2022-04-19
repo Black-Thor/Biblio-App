@@ -38,6 +38,10 @@ dependencies:
   firebase_auth: ^3.3.11
   firebase_core: ^1.13.1
   cloud_firestore: ^3.1.10
+  introduction_screen: ^3.0.2
+  smooth_page_indicator: ^1.0.0+2
+  shared_preferences: ^2.0.13
+  shared_preferences_web: ^2.0.3
   
 
 dev_dependencies:
@@ -72,6 +76,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/onboarding/
+    - assets/icon/
+    - assets/profile/
     
   #   - images/a_dot_ham.jpeg
 

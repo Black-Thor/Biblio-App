@@ -6,30 +6,6 @@ import 'package:flutter/gestures.dart';
 import 'package:bibliotrack/utils/firestore.dart';
 
 class ProfilePage extends StatelessWidget {
-  Widget textfield({hintText}) {
-    return Material(
-      elevation: 4,
-      shadowColor: Color(0xff0092A2),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: TextStyle(
-              letterSpacing: 2,
-              color: Color(0xff0092A2),
-              fontWeight: FontWeight.bold,
-            ),
-            fillColor: Colors.white30,
-            filled: true,
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none)),
-      ),
-    );
-  }
-
   @override
   String uid = AuthenticationHelper().getUid().toString();
   Widget build(BuildContext context) {
@@ -60,21 +36,47 @@ class ProfilePage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
-                        onPressed: () => GetUserName(uid), child: Text("test")),
-                    textfield(
-                      hintText: "${AuthenticationHelper().userInfo()}",
-                    ),
-                    textfield(
-                      hintText: 'Change password',
-                    ),
                     Container(
                       height: 55,
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {},
                         child: Text(
-                          'Mettre à jour',
+                          AuthenticationHelper().getEmail(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 22),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xff0092A2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(28),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 55,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: GetUserName(uid),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xff0092A2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(28),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 55,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('centrebutton');
+                        },
+                        child: Text(
+                          'Reset du Mot de passe',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 22),
                         ),
@@ -123,7 +125,7 @@ class ProfilePage extends StatelessWidget {
                   color: Colors.white,
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage('assets/images/profile.png'),
+                    image: AssetImage('assets/profile/secret-gif.gif'),
                   ),
                 ),
               ),
@@ -146,6 +148,30 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget textfield({hintText}) {
+  return Material(
+    elevation: 4,
+    shadowColor: Color(0xff0092A2),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: TextField(
+      decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(
+            letterSpacing: 2,
+            color: Color(0xff0092A2),
+            fontWeight: FontWeight.bold,
+          ),
+          fillColor: Colors.white30,
+          filled: true,
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide.none)),
+    ),
+  );
 }
 
 class HeaderCurvedContainer extends CustomPainter {

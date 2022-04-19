@@ -6,17 +6,16 @@ import 'package:bibliotrack/utils/firestore.dart';
 import 'package:bibliotrack/views/Login/loginPage.dart';
 import 'package:bibliotrack/views/bookPage/comicsPages.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
-import 'package:bibliotrack/views/bookPage/mangaPage.dart';
 import 'package:bibliotrack/views/bookPage/vinylePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomSideBar extends StatefulWidget {
   @override
   State<CustomSideBar> createState() => _CustomSideBarState();
 }
-
 
 class _CustomSideBarState extends State<CustomSideBar> {
   // const CustomSideBar({Key? key}) : super(key: key);
@@ -29,7 +28,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
         children: [
           UserAccountsDrawerHeader(
             accountName: GetUserName(uid),
-            accountEmail: Text("${AuthenticationHelper().userInfo()}"),
+            accountEmail: Text(AuthenticationHelper().getEmail()),
             decoration: const BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
@@ -102,8 +101,10 @@ class _CustomSideBarState extends State<CustomSideBar> {
           ListTile(
             title: Text('Exit'),
             leading: Icon(Icons.exit_to_app),
-            onTap: () {
+            onTap: () async {
               exitApp(context);
+              final showOnBoard = await SharedPreferences.getInstance();
+              showOnBoard.setBool('showOnBoard', false);
               MaterialPageRoute(builder: (context) => LoginPage());
             },
           ),
