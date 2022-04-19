@@ -1,10 +1,12 @@
+import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
+import 'package:bibliotrack/utils/firestore.dart';
+
 class ProfilePage extends StatelessWidget {
-  Widget textfield({@required hintText}) {
+  Widget textfield({hintText}) {
     return Material(
       elevation: 4,
       shadowColor: Color(0xff0092A2),
@@ -29,6 +31,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   @override
+  String uid = AuthenticationHelper().getUid().toString();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -57,18 +60,13 @@ class ProfilePage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    ElevatedButton(
+                        onPressed: () => GetUserName(uid), child: Text("test")),
                     textfield(
-                      hintText: 'Username',
+                      hintText: "${AuthenticationHelper().userInfo()}",
                     ),
                     textfield(
-                      hintText: "$emailReturned",
-                      
-                    ),
-                    textfield(
-                      hintText: 'Password',
-                    ),
-                    textfield(
-                      hintText: 'Confirm password',
+                      hintText: 'Change password',
                     ),
                     Container(
                       height: 55,

@@ -115,7 +115,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       await FirebaseAuth.instance.currentUser!;
                                   var uid = user.uid;
                                   print(uid);
-                                  collectionHelper().addUser(
+                                  CollectionHelper().addUser(
                                       uid: uid,
                                       username: nickName.text.toString());
                                   Navigator.pushReplacement(

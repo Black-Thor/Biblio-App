@@ -1,3 +1,4 @@
+import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/widget/addingButton.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _BookPageState extends State<BookPage> {
     // TODO: implement initState
     super.initState();
     //userInfo si for sidebar data
-    userInfo();
+    AuthenticationHelper().userInfo();
   }
 
   @override

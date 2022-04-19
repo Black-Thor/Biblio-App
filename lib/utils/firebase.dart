@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../views/Login/loginPage.dart';
 
 class AuthenticationHelper {
@@ -94,5 +91,19 @@ class AuthenticationHelper {
             context, MaterialPageRoute(builder: (context) => BookPage()));
       }
     });
+  }
+
+  Future userInfo() async {
+    String? emailReturned;
+
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        emailReturned = _auth.currentUser?.email;
+        print(_auth.currentUser);
+      }
+    });
+    return emailReturned;
   }
 }

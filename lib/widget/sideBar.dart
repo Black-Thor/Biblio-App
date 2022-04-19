@@ -4,45 +4,23 @@ import 'dart:math';
 import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/utils/firestore.dart';
 import 'package:bibliotrack/views/Login/loginPage.dart';
-import 'package:bibliotrack/views/Register/registerPage.dart';
 import 'package:bibliotrack/views/bookPage/comicsPages.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:bibliotrack/views/bookPage/mangaPage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bibliotrack/views/bookPage/vinylePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CustomSideBar extends StatefulWidget {
   @override
   State<CustomSideBar> createState() => _CustomSideBarState();
 }
 
-String? emailReturned;
-String? test;
-Future userInfo() async {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseAuth.instance.authStateChanges().listen((User? user) {
-    if (user == null) {
-      print('User is currently signed out!');
-    } else {
-      emailReturned = _auth.currentUser?.email;
-      print(_auth.currentUser);
-    }
-  });
-  return emailReturned;
-}
 
 class _CustomSideBarState extends State<CustomSideBar> {
   // const CustomSideBar({Key? key}) : super(key: key);
   String uid = AuthenticationHelper().getUid().toString();
-
-  getUsername() {
-    var username = collectionHelper().getDoc();
-    print(username);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -50,8 +28,8 @@ class _CustomSideBarState extends State<CustomSideBar> {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text("test"),
-            accountEmail: Text("${emailReturned}"),
+            accountName: GetUserName(uid),
+            accountEmail: Text("${AuthenticationHelper().userInfo()}"),
             decoration: const BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
@@ -59,10 +37,6 @@ class _CustomSideBarState extends State<CustomSideBar> {
                 image: AssetImage('assets/images/sidebar.jpg'),
               ),
             ),
-          ),
-          ListTile(
-            title: Text('test'),
-            onTap: () => getUsername(),
           ),
           ListTile(
             leading: Icon(Icons.menu_book),
@@ -85,11 +59,11 @@ class _CustomSideBarState extends State<CustomSideBar> {
           ),
           ListTile(
             leading: Icon(Icons.share),
-            title: Text('Manga'),
+            title: Text('Vinyle'),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => MangaPages()));
+                  MaterialPageRoute(builder: (context) => VinylePage()));
             },
           ),
           Divider(

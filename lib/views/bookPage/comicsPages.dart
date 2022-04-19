@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/utils/firestore.dart';
 import 'package:bibliotrack/widget/addingButton.dart';
 import 'package:bibliotrack/widget/cardScroll.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -17,6 +21,7 @@ class ComicsPage extends StatefulWidget {
 
 class _ComicsPageState extends State<ComicsPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     String Page = "Comics";
@@ -29,16 +34,25 @@ class _ComicsPageState extends State<ComicsPage> {
         children: [
           Padding(padding: EdgeInsets.only(top: 75)),
           ElevatedButton(
-              onPressed: () async {
-                var user = await FirebaseAuth.instance.currentUser!;
-                var uid = user.uid;
-                print(uid);
-                collectionHelper().addUser(uid: uid, username: "username");
-              },
-              child: Text("test 1")),
+            onPressed: () async {
+
+              CollectionReference users =
+                  FirebaseFirestore.instance.collection('users');
+
+              final documents =
+                  await users.where("username", isEqualTo: "username").get();
+              documents.docs.forEach((element) {
+                print(element);
+              });
+              // documents.docs.forEach((element) {
+              //   print(MyClass.fromJson(element.data));
+              // });
+            },
+            child: Text('test'),
+          ),
           ElevatedButton(
               onPressed: () {
-                collectionHelper().addUser(uid: "TEST 1", username: "username");
+                CollectionHelper().addUser(uid: "TEST 1", username: "username");
               },
               child: Text('Test 2'))
         ],

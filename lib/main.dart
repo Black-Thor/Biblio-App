@@ -14,7 +14,7 @@ void main() async {
     debugShowCheckedModeBanner: false,
   ));
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
 }

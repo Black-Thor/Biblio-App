@@ -1,21 +1,22 @@
-import 'package:bibliotrack/widget/addingButton.dart';
-import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:bibliotrack/widget/addingButton.dart';
+import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 
-class MangaPages extends StatefulWidget {
-  MangaPages({Key? key}) : super(key: key);
+
+class VinylePage extends StatefulWidget {
+  VinylePage({Key? key}) : super(key: key);
 
   @override
-  State<MangaPages> createState() => _MangaPagesState();
+  State<VinylePage> createState() => _VinylePageState();
 }
 
-class _MangaPagesState extends State<MangaPages> {
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
+class _VinylePageState extends State<VinylePage> {
+final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    String Page = "Manga";
+    String Page = "Vinyle";
     return Scaffold(
       key: _key,
       extendBodyBehindAppBar: true,
