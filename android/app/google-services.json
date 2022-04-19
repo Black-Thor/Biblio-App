@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "613844981136",
+    "project_id": "biblio-55ca4",
+    "storage_bucket": "biblio-55ca4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613844981136:android:e52bc5d42bab8ee6c78f15",
+        "android_client_info": {
+          "package_name": "com.example.bibliotrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "613844981136-9diki3441ejpuo2jhclbumd96cm8ds7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuRVzxLxw49YmbvjZZn1g__dXw1iMvEAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "613844981136-9diki3441ejpuo2jhclbumd96cm8ds7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
