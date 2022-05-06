@@ -1,5 +1,9 @@
-on: push
-name: Test, Build and Release apk
+on: 
+  push:
+      branches:
+        - develop
+        - feature/cicd
+name: Build and test
 jobs:
   build:
     name: Build APK
@@ -14,5 +18,7 @@ jobs:
       with:
         flutter-version: '2.10.4'
     - run: flutter pub get
+    - run: flutter analyze
+    - run: flutter test
     - run: flutter build apk --debug
     
