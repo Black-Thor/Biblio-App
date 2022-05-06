@@ -1,8 +1,8 @@
 on: 
   push:
       branches:
-        - feature/cicd
-name: feature delivery  
+        - develop
+name: develop delivery 
 jobs:
   build:
     name: Build APK
@@ -20,4 +20,3 @@ jobs:
     - run: flutter analyze
     # - run: flutter test
     - run: flutter build apk --debug
-    
