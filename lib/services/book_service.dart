@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 
 List<GoogleBooks> parseProducts(String responseBody) {
   final parsed = json.decode(responseBody);
-
   return parsed["items"]
       .map<GoogleBooks>((json) => GoogleBooks.fromJson(json))
       .toList();

@@ -5,11 +5,11 @@ class ApiConstants {
 
 class VinyleApiConstants {
   static String baseUrl = 'http://api.discogs.com/database';
-  static String searchEndPoint = '/search?query=';
+  static String searchEndPoint = '/search?barcode=';
   static String auth = '&token=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN';
 }
 
-class GoogleApiConstants{
+class GoogleApiConstants {
   static String baseUrl = 'https://www.googleapis.com/books/v1/';
   static String searchEndPoint = 'volumes?q=isbn:';
   static String auth = '&token=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN';

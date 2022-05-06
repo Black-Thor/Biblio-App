@@ -40,11 +40,9 @@ class _BookPageState extends State<BookPage> {
     return barcodes.map(BookBarcode.fromDynamic).toList();
   }
 
-  late List testing = [];
-
   void _getBook() async {
+    final list = await listOfBookBarcode();
     try {
-      final list = await listOfBookBarcode();
       _googleBookModel = await ApiServiceBook().getFrenchBooks(list);
     } catch (error) {
       ScaffoldMessenger.of(context)
@@ -125,7 +123,7 @@ class _BookPageState extends State<BookPage> {
                 ),
         ),
       ),
-      floatingActionButton:  addButton(),
+      floatingActionButton: addButton(),
     );
   }
 }
