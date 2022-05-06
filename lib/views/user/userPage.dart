@@ -75,7 +75,7 @@ class ProfilePage extends StatelessWidget {
                         onPressed: () {
                           print('centrebutton');
                         },
-                        child: Text(
+                        child: const Text(
                           'Reset du Mot de passe',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 22),
@@ -125,7 +125,7 @@ class ProfilePage extends StatelessWidget {
                   color: Colors.white,
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage('assets/profile/secret-gif.gif'),
+                    image: AssetImage('assets/profile/profile1.png'),
                   ),
                 ),
               ),
