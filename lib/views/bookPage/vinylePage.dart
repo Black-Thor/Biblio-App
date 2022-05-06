@@ -2,6 +2,8 @@ import 'package:bibliotrack/models/userModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/services/api_service.dart';
 import 'package:bibliotrack/services/vinyle_service.dart';
+import 'package:bibliotrack/utils/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bibliotrack/widget/addingButton.dart';
@@ -20,12 +22,21 @@ class _VinylePageState extends State<VinylePage> {
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-  List barcode = [0886976651817, 050087310882];
-
   @override
   void initState() {
     super.initState();
     _getVinyl();
+  }
+
+  Future<List<Barcode>> listOfBarcode() async {
+    final value = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(AuthenticationHelper().getUid())
+        .get();
+    print("value of instance : ${value.data()!["barcode"]}");
+
+    final barcodes = value.data()!["barcode"] as List<dynamic>;
+    return barcodes.map(Barcode.fromDynamic).toList();
   }
 
   void _getVinyl() async {
@@ -35,7 +46,8 @@ class _VinylePageState extends State<VinylePage> {
     // });
 
     try {
-      _discogsModel = await ApiServiceVinyle().getFrenchVinyls(0886976651817);
+      final list = await listOfBarcode();
+      _discogsModel = await ApiServiceVinyle().getFrenchVinyls(list);
       // _discogsModel = barcode
       //     .expand((element) async =>
       //         (await ApiServiceVinyle().getFrenchVinyls(barcode)))
