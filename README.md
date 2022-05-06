@@ -1,5 +1,4 @@
 # bibliotrack
-[![Test, Build and Release apk](https://github.com/Black-Thor/Biblio-App/actions/workflows/main.yml/badge.svg)](https://github.com/Black-Thor/Biblio-App/actions/workflows/main.yml)
 
 A new Flutter project.
 
