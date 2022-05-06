@@ -1,4 +1,5 @@
 import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/views/Register/registerPage.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -8,6 +9,15 @@ import 'package:bibliotrack/utils/firestore.dart';
 class ProfilePage extends StatelessWidget {
   @override
   String uid = AuthenticationHelper().getUid().toString();
+  String email = AuthenticationHelper().getEmail().toString();
+  final profile = [
+    'assets/profile/profile1.png',
+    'assets/profile/profile2.png',
+    'assets/profile/profile3.png',
+    'assets/profile/profile4.png',
+    'assets/profile/profile5.png',
+  ];
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -73,10 +83,11 @@ class ProfilePage extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          print('centrebutton');
+                          AuthenticationHelper().passwordReset(email, context);
+                          print("object");
                         },
                         child: const Text(
-                          'Reset du Mot de passe',
+                          'Reset du mot de passe',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 22),
                         ),
@@ -94,7 +105,7 @@ class ProfilePage extends StatelessWidget {
             ],
           ),
           CustomPaint(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
             ),
@@ -125,7 +136,7 @@ class ProfilePage extends StatelessWidget {
                   color: Colors.white,
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage('assets/profile/profile1.png'),
+                    image: AssetImage("${profile[0]}"),
                   ),
                 ),
               ),

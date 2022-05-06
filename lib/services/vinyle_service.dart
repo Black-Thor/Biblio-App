@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:bibliotrack/models/userModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/resource/apiConstants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 List<Discogs> parseProducts(String responseBody) {
@@ -14,22 +15,26 @@ List<Discogs> parseProducts(String responseBody) {
       .toList();
 }
 
-class ApiServiceV {
-  Future<List<Discogs>?> getVinyle() async {
-    var url = Uri.parse(
-        "http://api.discogs.com/database/search?barcode=050087310882&token=ngMzonctIkEONyHkiNGQOpPsgVbVDWBHxSrGMMPV");
+class ApiServiceVinyle {
+  Future<List<Discogs>> getVinyle(barcode) async {
+    var url = Uri.parse(VinyleApiConstants.baseUrl +
+        VinyleApiConstants.searchEndPoint +
+        barcode.toString() +
+        VinyleApiConstants.auth);
 
     var response = await http.get(url);
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return parseProducts(response.body);
-    }
+    } 
+
+    throw new Exception('Some arbitrary error'); 
   }
 
-  Future<List<Discogs>?> getFrenchVinyls() async {
-    final vinyls = await getVinyle();
+  Future<List<Discogs>> getFrenchVinyls(barcode) async {
+    final vinyls = await getVinyle(barcode);
 
-    return vinyls?.fold<List<Discogs>>([], (previousVinyls, currentVinyl) {
+    return vinyls.fold<List<Discogs>>([], (previousVinyls, currentVinyl) {
       final alreadyHaveVinyl = previousVinyls
           .where((vinyl) => vinyl.title == currentVinyl.title)
           .isNotEmpty;

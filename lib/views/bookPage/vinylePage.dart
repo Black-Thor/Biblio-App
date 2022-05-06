@@ -16,25 +16,35 @@ class VinylePage extends StatefulWidget {
 }
 
 class _VinylePageState extends State<VinylePage> {
-  late List<UserModel>? _userModel = [];
-  late List<Discogs>? _discogsModel = [];
+  late List<Discogs> _discogsModel = [];
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  List barcode = [0886976651817, 050087310882];
 
   @override
   void initState() {
     super.initState();
-    _getData();
     _getVinyl();
   }
 
-  void _getData() async {
-    _userModel = (await ApiService().getUsers())!;
-    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
-  }
-
   void _getVinyl() async {
-    _discogsModel = (await ApiServiceV().getFrenchVinyls());
+    // barcode.forEach((element) async {
+    //   _discogsModel?.addAll(
+    //       (await ApiServiceVinyle().getFrenchVinyls(element)));
+    // });
+
+    try {
+      _discogsModel = await ApiServiceVinyle().getFrenchVinyls(0886976651817);
+      // _discogsModel = barcode
+      //     .expand((element) async =>
+      //         (await ApiServiceVinyle().getFrenchVinyls(barcode)))
+      //     .toList();
+    } catch (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('${error}')));
+    }
+
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
 
@@ -46,12 +56,12 @@ class _VinylePageState extends State<VinylePage> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(Page, context, _key),
       drawer: CustomSideBar(),
-      body: _discogsModel == null || _discogsModel!.isEmpty
+      body: _discogsModel == null || _discogsModel.isEmpty
           ? const Center(
               child: CircularProgressIndicator(),
             )
           : ListView.builder(
-              itemCount: _discogsModel!.length,
+              itemCount: _discogsModel.length,
               itemBuilder: (context, index) {
                 return Card(
                   child: Column(
@@ -60,14 +70,14 @@ class _VinylePageState extends State<VinylePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Image.network(
-                            _discogsModel![index].coverImage.toString(),
+                            _discogsModel[index].coverImage.toString(),
                             scale: 5,
                             alignment: Alignment.centerLeft,
                           ),
                           Column(
                             children: [
                               Text(
-                                _discogsModel![index].title.toString(),
+                                _discogsModel[index].title.toString(),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -75,7 +85,7 @@ class _VinylePageState extends State<VinylePage> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
-                              Text(_discogsModel![index].year.toString()),
+                              Text(_discogsModel[index].year.toString()),
                             ],
                           )
                         ],

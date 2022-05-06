@@ -5,6 +5,6 @@ class ApiConstants {
 
 class VinyleApiConstants {
   static String baseUrl = 'http://api.discogs.com/database';
-  static String searchEndPoint = '/search?barcode=0886976651817';
+  static String searchEndPoint = '/search?barcode=';
   static String auth = '&token=ngMzonctIkEONyHkiNGQOpPsgVbVDWBHxSrGMMPV';
 }

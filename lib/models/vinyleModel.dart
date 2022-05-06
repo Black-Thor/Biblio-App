@@ -3,7 +3,7 @@ class Discogs {
   final String? title;
   final String? coverImage;
   final String? country;
-  final String? year;
+  final String? year; 
 
   Discogs(this.id, this.title, this.coverImage, this.country, this.year);
   factory Discogs.fromMap(Map<String, dynamic> json) {
@@ -14,4 +14,6 @@ class Discogs {
     return Discogs(json['id'], json['title'], json['cover_image'],
         json['country'], json['year']);
   }
+
+
 }
