@@ -42,7 +42,8 @@ class ApiServiceVinyle {
 
     return vinyls.fold<List<Discogs>>([], (previousVinyls, currentVinyl) {
       final alreadyHaveVinyl = previousVinyls
-          .where((vinyl) => vinyl.title == currentVinyl.title)
+          .where((vinyl) =>
+              vinyl.title == currentVinyl.title)
           .isNotEmpty;
       if (alreadyHaveVinyl) {
         return previousVinyls;

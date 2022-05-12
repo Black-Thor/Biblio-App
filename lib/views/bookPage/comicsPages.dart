@@ -26,33 +26,9 @@ class _ComicsPageState extends State<ComicsPage> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(Page, context, _key),
       drawer: CustomSideBar(),
-      body: Column(
-        children: [
-          Padding(padding: EdgeInsets.only(top: 75)),
-          ElevatedButton(
-            onPressed: () async {
-              CollectionReference users =
-                  FirebaseFirestore.instance.collection('users');
-
-              final documents =
-                  await users.where("username", isEqualTo: "username").get();
-              documents.docs.forEach((element) {
-                print(element);
-              });
-              // documents.docs.forEach((element) {
-              //   print(MyClass.fromJson(element.data));
-              // });
-            },
-            child: Text('test'),
-          ),
-          ElevatedButton(
-              onPressed: () {
-                CollectionHelper().addUser(uid: "TEST 1", username: "username");
-              },
-              child: Text('Test 2'))
-        ],
-      ),
+      body: Column(),
       floatingActionButton: addButton(),
     );
   }
 }
+ 

@@ -63,8 +63,10 @@ _addingModalTab(context) {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ElevatedButton(
-                              onPressed: () {},
-                              child: const Text('Recherche'),
+                              onPressed: () {
+                                
+                              },
+                              child: const Text('Ajouter'),
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.blue[900],
                                   fixedSize: const Size(200, 50),
