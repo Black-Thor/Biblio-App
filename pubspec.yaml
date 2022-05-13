@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.0.13
   shared_preferences_web: ^2.0.3
   http: ^0.13.4
+  loading_gifs: ^0.3.0
   
 
 dev_dependencies:

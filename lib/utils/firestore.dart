@@ -10,8 +10,8 @@ class CollectionHelper {
     // Call the user's CollectionReference to add a new user
     return users
         .add({
-          'uid': uid, // John Doe
-          'username': username, // Stokes and Sons
+          'uid': uid, 
+          'username': username, 
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
@@ -100,6 +100,3 @@ class finduser extends StatelessWidget {
     );
   }
 }
-
-// AuthenticationHelper().getEmail()
-// style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
