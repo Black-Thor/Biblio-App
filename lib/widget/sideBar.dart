@@ -7,6 +7,7 @@ import 'package:bibliotrack/views/Login/loginPage.dart';
 import 'package:bibliotrack/views/bookPage/comicsPages.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:bibliotrack/views/bookPage/vinylePage.dart';
+import 'package:bibliotrack/views/wishlist/wishlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
@@ -74,7 +75,11 @@ class _CustomSideBarState extends State<CustomSideBar> {
           ListTile(
             leading: Icon(Icons.wallet_giftcard_rounded),
             title: Text('WhishList'),
-            onTap: () => null,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => WishList()));
+            },
           ),
           Divider(
             thickness: 2,

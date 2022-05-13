@@ -26,6 +26,12 @@ class AuthenticationHelper {
     return uid;
   }
 
+  String? returnEmail() {
+    var user = FirebaseAuth.instance.currentUser!;
+    var email = user.email;
+    return email;
+  }
+
   //SIGN IN METHOD
   Future signIn({required String email, required String password}) async {
     try {
