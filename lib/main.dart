@@ -7,7 +7,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+        apiKey: "AIzaSyCuRVzxLxw49YmbvjZZn1g__dXw1iMvEAY",
+        authDomain:
+            "613844981136-9diki3441ejpuo2jhclbumd96cm8ds7a.apps.googleusercontent.com",
+        projectId: "biblio-55ca4",
+        storageBucket: "biblio-55ca4.appspot.com",
+        messagingSenderId: "613844981136",
+        appId: "1:613844981136:android:e52bc5d42bab8ee6c78f15"),
+  );
   final prefs = await SharedPreferences.getInstance();
   final showOnBoard = prefs.getBool('showOnBoard') ?? false;
 

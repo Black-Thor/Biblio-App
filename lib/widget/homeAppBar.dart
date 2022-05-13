@@ -12,7 +12,7 @@ class CustomAppBar extends AppBar {
           ),
           backgroundColor: Color(0xff0092A2),
           title: Text(
-            "Bienvenue dans vos $Page",
+            "$Page",
             style: TextStyle(
               color: Colors.white,
             ),
