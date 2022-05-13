@@ -16,27 +16,34 @@ List<Discogs> parseProducts(String responseBody) {
 }
 
 class ApiServiceVinyle {
-  Future<List<Discogs>> getVinyle(barcode) async {
+  Future<List<Discogs>> findVinylsByBarcode(Barcode barcode) async {
     var url = Uri.parse(VinyleApiConstants.baseUrl +
         VinyleApiConstants.searchEndPoint +
-        barcode.toString() +
+        barcode.code.toString() +
         VinyleApiConstants.auth);
 
     var response = await http.get(url);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       return parseProducts(response.body);
-    } 
+    }
 
-    throw new Exception('Some arbitrary error'); 
+    throw new Exception('Some arbitrary error');
   }
 
-  Future<List<Discogs>> getFrenchVinyls(barcode) async {
-    final vinyls = await getVinyle(barcode);
+  Future<List<Discogs>> findVinylsByBarcodes(List<Barcode> barcodes) async {
+    return (await Future.wait(
+            barcodes.map((barcode) => findVinylsByBarcode(barcode))))
+        .expand((discorgList) => discorgList)
+        .toList();
+  }
+
+  Future<List<Discogs>> getFrenchVinyls(List<Barcode> barcodeCollection) async {
+    final vinyls = await findVinylsByBarcodes(barcodeCollection);
 
     return vinyls.fold<List<Discogs>>([], (previousVinyls, currentVinyl) {
       final alreadyHaveVinyl = previousVinyls
-          .where((vinyl) => vinyl.title == currentVinyl.title)
+          .where((vinyl) =>
+              vinyl.title == currentVinyl.title)
           .isNotEmpty;
       if (alreadyHaveVinyl) {
         return previousVinyls;
