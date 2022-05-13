@@ -113,7 +113,7 @@ class _VinylePageState extends State<VinylePage> {
                 },
               ),
       ),
-      floatingActionButton: const addButton(),
+      floatingActionButton:  addButton(),
     );
   }
 }

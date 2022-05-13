@@ -30,21 +30,21 @@ class _BookPageState extends State<BookPage> {
     AuthenticationHelper().userInfo();
   }
 
-  Future<List<Barcode>> listOfBarcode() async {
+  Future<List<BookBarcode>> listOfBookBarcode() async {
     final value = await FirebaseFirestore.instance
         .collection("users")
         .doc(AuthenticationHelper().getUid())
         .get();
     print("value of instance : ${value.data()!["BookBarcode"]}");
     final barcodes = value.data()!["BookBarcode"] as List<dynamic>;
-    return barcodes.map(Barcode.fromDynamic).toList();
+    return barcodes.map(BookBarcode.fromDynamic).toList();
   }
 
   late List testing = [];
 
   void _getBook() async {
     try {
-      final list = await listOfBarcode();
+      final list = await listOfBookBarcode();
       _googleBookModel = await ApiServiceBook().getFrenchBooks(list);
     } catch (error) {
       ScaffoldMessenger.of(context)
@@ -125,7 +125,7 @@ class _BookPageState extends State<BookPage> {
                 ),
         ),
       ),
-      floatingActionButton: const addButton(),
+      floatingActionButton:  addButton(),
     );
   }
 }

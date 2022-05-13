@@ -76,25 +76,25 @@ class ImageLinks {
   }
 }
 
-class Barcode {
+class BookBarcode {
   final int code;
 
-  Barcode(
+  BookBarcode(
     this.code,
   );
 
-  factory Barcode.fromDynamic(dynamic barcode) {
-    return Barcode(barcode);
+  factory BookBarcode.fromDynamic(dynamic barcode) {
+    return BookBarcode(barcode);
   }
 }
 
 class BarcodeCollection extends Iterable {
-  final Iterable<Barcode> _barcodeCollection;
+  final Iterable<BookBarcode> _barcodeCollection;
 
   BarcodeCollection(this._barcodeCollection);
 
   factory BarcodeCollection.fromDynamicList(Iterable<dynamic> barcodes) {
-    return BarcodeCollection(barcodes.map(Barcode.fromDynamic));
+    return BarcodeCollection(barcodes.map(BookBarcode.fromDynamic));
   }
 
   @override

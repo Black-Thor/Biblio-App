@@ -15,7 +15,7 @@ List<GoogleBooks> parseProducts(String responseBody) {
 }
 
 class ApiServiceBook {
-  Future<List<GoogleBooks>> findBooksByBarcode(Barcode barcode) async {
+  Future<List<GoogleBooks>> findBooksByBarcode(BookBarcode barcode) async {
     var url = Uri.parse(GoogleApiConstants.baseUrl +
         GoogleApiConstants.searchEndPoint +
         barcode.code.toString() +
@@ -28,7 +28,8 @@ class ApiServiceBook {
     throw new Exception('Some arbitrary error');
   }
 
-  Future<List<GoogleBooks>> findBooksByBarcodes(List<Barcode> barcodes) async {
+  Future<List<GoogleBooks>> findBooksByBarcodes(
+      List<BookBarcode> barcodes) async {
     return (await Future.wait(
             barcodes.map((barcode) => findBooksByBarcode(barcode))))
         .expand((discorgList) => discorgList)
@@ -36,13 +37,13 @@ class ApiServiceBook {
   }
 
   Future<List<GoogleBooks>> getFrenchBooks(
-      List<Barcode> barcodeCollection) async {
+      List<BookBarcode> barcodeCollection) async {
     final books = await findBooksByBarcodes(barcodeCollection);
 
     return books.fold<List<GoogleBooks>>([], (previousBooks, currentBook) {
       final alreadyHaveVinyl = previousBooks
-          .where((book) =>
-              book.volumeInfo!.title == currentBook.volumeInfo!.title)
+          .where(
+              (book) => book.volumeInfo!.title == currentBook.volumeInfo!.title)
           .isNotEmpty;
       if (alreadyHaveVinyl) {
         return previousBooks;

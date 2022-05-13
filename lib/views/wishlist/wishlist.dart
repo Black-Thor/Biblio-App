@@ -8,27 +8,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 
-class ComicsPage extends StatefulWidget {
-  ComicsPage({Key? key}) : super(key: key);
+class WishList extends StatefulWidget {
+  WishList({Key? key}) : super(key: key);
 
   @override
-  State<ComicsPage> createState() => _ComicsPageState();
+  State<WishList> createState() => _WishListState();
 }
 
-class _ComicsPageState extends State<ComicsPage> {
+class _WishListState extends State<WishList> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    String Page = "Comics";
+    String Page = "WishList";
     return Scaffold(
       key: _key,
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(Page, context, _key),
       drawer: CustomSideBar(),
-      body: Text("Prochainement"),
-      floatingActionButton: addButton(),
+      body: Column(),
     );
   }
 }
- 

@@ -49,8 +49,7 @@ class BooksDetail extends StatelessWidget {
           color: const Color(0xffff8989),
           child: InkWell(
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => BookPage()));
+              Navigator.pop(context);
             },
             child: const SizedBox(
               height: kToolbarHeight,

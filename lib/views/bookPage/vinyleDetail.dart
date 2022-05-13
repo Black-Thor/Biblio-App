@@ -21,11 +21,10 @@ class VinylsDetail extends StatelessWidget {
       body: Column(
         children: [
           FadeInImage.assetNetwork(
-            height: 110,
-            width: 110,
+            height: 250.0,
             fadeInDuration: const Duration(seconds: 1),
             fadeInCurve: Curves.bounceIn,
-            fit: BoxFit.fitHeight,
+            fit: BoxFit.cover,
             placeholder: circularProgressIndicator,
             image: VinylsModel.coverImage.toString(),
           ),
@@ -57,8 +56,7 @@ Row detailsButton(context) {
         color: const Color(0xffff8989),
         child: InkWell(
           onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => VinylePage()));
+            Navigator.pop(context);
           },
           child: const SizedBox(
             height: kToolbarHeight,
