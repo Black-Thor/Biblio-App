@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-class addButton extends StatefulWidget {
-  addButton({Key? key}) : super(key: key);
+class addViynylsButton extends StatefulWidget {
+  addViynylsButton({Key? key}) : super(key: key);
 
   @override
-  State<addButton> createState() => _addButtonState();
+  State<addViynylsButton> createState() => _addButtonState();
 }
 
-class _addButtonState extends State<addButton> {
+class _addButtonState extends State<addViynylsButton> {
   String _scanBookBarcode = '';
   final myController = TextEditingController();
 
@@ -47,7 +47,7 @@ class _addButtonState extends State<addButton> {
           .collection("users")
           .doc(AuthenticationHelper().getUid())
           .update({
-        "BookBarcode": FieldValue.arrayUnion([myInt])
+        "barcode": FieldValue.arrayUnion([myInt])
       }).then((_) {
         print("success!");
       });
@@ -210,7 +210,7 @@ void _onPressed(data) {
       .collection("users")
       .doc(AuthenticationHelper().getUid())
       .update({
-    "BookBarcode": FieldValue.arrayUnion([data])
+    "barcode": FieldValue.arrayUnion([data])
   }).then((_) {
     print("success!");
   });
