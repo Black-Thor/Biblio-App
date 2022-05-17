@@ -1,7 +1,9 @@
 import 'package:bibliotrack/models/bookModel.dart';
+import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/views/bookPage/bookPage.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_gifs/loading_gifs.dart';
 
@@ -20,7 +22,11 @@ class BooksDetail extends StatelessWidget {
       drawer: CustomSideBar(),
       bottomNavigationBar: detailsButton(context),
       body: Column(
-        children: [
+        children: <Widget>[
+          Text(
+            googleBookModel.volumeInfo!.title.toString(),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
           FadeInImage.assetNetwork(
               height: 110,
               width: 110,
@@ -49,14 +55,15 @@ class BooksDetail extends StatelessWidget {
           color: const Color(0xffff8989),
           child: InkWell(
             onTap: () {
-              Navigator.pop(context);
+              _onPressed(googleBookModel
+                  .volumeInfo!.industryIdentifiers![1].identifier);
             },
             child: const SizedBox(
               height: kToolbarHeight,
               width: 200,
               child: Center(
                 child: Text(
-                  'Retour en arriére',
+                  'Supprimer',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -90,5 +97,15 @@ class BooksDetail extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _onPressed(elemets) {
+    final FirebaseFirestore _store = FirebaseFirestore.instance;
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(AuthenticationHelper().getUid())
+        .update({"BookBarcode": FieldValue.arrayRemove(elemets)}).then((_) {
+      print("success!");
+    });
   }
 }
