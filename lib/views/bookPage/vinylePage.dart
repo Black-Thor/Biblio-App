@@ -4,6 +4,7 @@ import 'package:bibliotrack/services/api_service.dart';
 import 'package:bibliotrack/services/vinyle_service.dart';
 import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/views/bookPage/vinyleDetail.dart';
+import 'package:bibliotrack/widget/addingVinyls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -69,51 +70,53 @@ class _VinylePageState extends State<VinylePage> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(Page, context, _key),
       drawer: CustomSideBar(),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: _discogsModel == null || _discogsModel.isEmpty
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.builder(
-                itemCount: _discogsModel.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                      child: ListTile(
-                    title: Text(
-                      _discogsModel[index].title.toString(),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    ),
-                    subtitle: Text(_discogsModel[index].year.toString()),
-                    trailing: Text(_discogsModel[index].genre![0].toString()),
-                    leading: SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: FadeInImage.assetNetwork(
-                          height: 100,
-                          width: 100,
-                          fadeInDuration: const Duration(seconds: 1),
-                          fadeInCurve: Curves.bounceIn,
-                          placeholder: circularProgressIndicator,
-                          image: _discogsModel[index].coverImage.toString()),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => VinylsDetail(
-                                VinylsModel: _discogsModel[index],
-                              )));
-                    },
-                  ));
-                },
-              ),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _discogsModel == null || _discogsModel.isEmpty
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView.builder(
+                  itemCount: _discogsModel.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                        child: ListTile(
+                      title: Text(
+                        _discogsModel[index].title.toString(),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      subtitle: Text(_discogsModel[index].year.toString()),
+                      trailing: Text(_discogsModel[index].genre![0].toString()),
+                      leading: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: FadeInImage.assetNetwork(
+                            height: 100,
+                            width: 100,
+                            fadeInDuration: const Duration(seconds: 1),
+                            fadeInCurve: Curves.bounceIn,
+                            placeholder: circularProgressIndicator,
+                            image: _discogsModel[index].coverImage.toString()),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => VinylsDetail(
+                                  VinylsModel: _discogsModel[index],
+                                )));
+                      },
+                    ));
+                  },
+                ),
+        ),
       ),
-      floatingActionButton:  addButton(),
+      floatingActionButton: addViynylsButton(),
     );
   }
 }

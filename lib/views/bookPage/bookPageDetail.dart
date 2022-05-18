@@ -11,40 +11,67 @@ class BooksDetail extends StatelessWidget {
   BooksDetail({Key? key, index, required this.googleBookModel})
       : super(key: key);
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-
-  @override
+  final List<Tab> myTabs = <Tab>[
+    Tab(text: 'Detail'),
+    Tab(text: 'Note'),
+  ];
   final GoogleBooks googleBookModel;
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _key,
-      appBar: CustomAppBar(
-          googleBookModel.volumeInfo!.title.toString(), context, _key),
-      drawer: CustomSideBar(),
-      bottomNavigationBar: detailsButton(context),
-      body: Column(
-        children: <Widget>[
-          Text(
-            googleBookModel.volumeInfo!.title.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          FadeInImage.assetNetwork(
-              height: 110,
-              width: 110,
-              fadeInDuration: const Duration(seconds: 1),
-              fadeInCurve: Curves.bounceIn,
-              fit: BoxFit.fitHeight,
-              placeholder: circularProgressIndicator,
-              image:
-                  'https://covers.openlibrary.org/b/isbn/${googleBookModel.volumeInfo!.industryIdentifiers![0].identifier}-L.jpg'),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            googleBookModel.volumeInfo!.description.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-        ],
-      ),
+    return DefaultTabController(
+      length: myTabs.length,
+      child: Scaffold(
+          appBar: CustomAppBarDetails(
+              googleBookModel.volumeInfo!.title.toString(),
+              myTabs,
+              context,
+              _key),
+          bottomNavigationBar: detailsButton(context),
+          body: TabBarView(
+            children: <Widget>[
+              Container(
+                child: Column(
+                  children: [
+                    Text(
+                      googleBookModel.volumeInfo!.title.toString(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    FadeInImage.assetNetwork(
+                        height: 110,
+                        width: 110,
+                        fadeInDuration: const Duration(seconds: 1),
+                        fadeInCurve: Curves.bounceIn,
+                        fit: BoxFit.fitHeight,
+                        placeholder: circularProgressIndicator,
+                        image:
+                            'https://covers.openlibrary.org/b/isbn/${googleBookModel.volumeInfo!.industryIdentifiers![0].identifier}-L.jpg'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      googleBookModel.volumeInfo!.description.toString(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      googleBookModel.volumeInfo!.title.toString(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
     );
   }
 
@@ -55,7 +82,7 @@ class BooksDetail extends StatelessWidget {
           color: const Color(0xffff8989),
           child: InkWell(
             onTap: () {
-              _onPressed(googleBookModel
+              _onPressedDelete(googleBookModel
                   .volumeInfo!.industryIdentifiers![1].identifier);
             },
             child: const SizedBox(
@@ -78,7 +105,10 @@ class BooksDetail extends StatelessWidget {
             color: const Color(0xffff8906),
             child: InkWell(
               onTap: () {
-                //print('called on tap');
+                _onPressedAdd(
+                    googleBookModel
+                        .volumeInfo!.industryIdentifiers![1].identifier,
+                    context);
               },
               child: const SizedBox(
                 height: kToolbarHeight,
@@ -99,13 +129,44 @@ class BooksDetail extends StatelessWidget {
     );
   }
 
-  void _onPressed(elemets) {
+  void _onPressedDelete(elemets) {
+    var myInt = int.parse(elemets);
+    assert(myInt is int);
+
     final FirebaseFirestore _store = FirebaseFirestore.instance;
     FirebaseFirestore.instance
         .collection("users")
         .doc(AuthenticationHelper().getUid())
-        .update({"BookBarcode": FieldValue.arrayRemove(elemets)}).then((_) {
+        .update({
+      "BookBarcode": FieldValue.arrayRemove([myInt])
+    }).then((_) {
       print("success!");
     });
+  }
+
+  void _onPressedAdd(elemets, context) async {
+    final FirebaseFirestore _store = FirebaseFirestore.instance;
+    var myInt = int.parse(elemets);
+    assert(myInt is int);
+
+    final value = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(AuthenticationHelper().getUid())
+        .get();
+    final barcodes = value.data()!["BookWish"] as List<dynamic>;
+
+    if (barcodes.contains(myInt)) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Already in wish list')));
+    } else {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(AuthenticationHelper().getUid())
+          .update({
+        "BookWish": FieldValue.arrayUnion([myInt])
+      }).then((_) {
+        print("success!");
+      });
+    }
   }
 }
