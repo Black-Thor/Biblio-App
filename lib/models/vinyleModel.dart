@@ -5,22 +5,17 @@ class Discogs {
   final String? country;
   final String? year;
   final List<dynamic>? genre;
+  final List<dynamic>? barcode;
 
-  Discogs(
-    this.id,
-    this.title,
-    this.coverImage,
-    this.country,
-    this.year,
-    this.genre,
-  );
+  Discogs(this.id, this.title, this.coverImage, this.country, this.year,
+      this.genre, this.barcode);
   factory Discogs.fromMap(Map<String, dynamic> json) {
     return Discogs(json['id'], json['title'], json['cover_image'],
-        json['country'], json['year'], json['genre']);
+        json['country'], json['year'], json['genre'], json['barcode']);
   }
   factory Discogs.fromJson(Map<String, dynamic> json) {
     return Discogs(json['id'], json['title'], json['cover_image'],
-        json['country'], json['year'], json['genre']);
+        json['country'], json['year'], json['genre'], json['barcode']);
   }
 }
 
