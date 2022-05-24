@@ -31,6 +31,7 @@ class CollectionHelper {
         .where('username', isEqualTo: '${username}')
         .get();
   }
+
 }
 
 class GetUserName extends StatelessWidget {

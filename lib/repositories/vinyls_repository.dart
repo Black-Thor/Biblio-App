@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:bibliotrack/models/userModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/resource/apiConstants.dart';
 import 'package:bibliotrack/usecases/convertion.dart';

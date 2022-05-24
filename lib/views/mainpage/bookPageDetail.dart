@@ -9,13 +9,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_gifs/loading_gifs.dart';
 
-class BooksDetail extends StatelessWidget {
+class BooksDetail extends StatefulWidget {
   BooksDetail({Key? key, index, required this.googleBookModel})
       : super(key: key);
 
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
   final GoogleBooks googleBookModel;
 
+  @override
+  State<BooksDetail> createState() => _BooksDetailState();
+}
+
+class _BooksDetailState extends State<BooksDetail> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+  double _currentSliderValue = 20;
   final List<Tab> myTabs = <Tab>[
     Tab(text: 'Detail'),
     Tab(text: 'Note'),
@@ -26,7 +32,7 @@ class BooksDetail extends StatelessWidget {
       length: myTabs.length,
       child: Scaffold(
           appBar: CustomAppBarDetails(
-              googleBookModel.volumeInfo!.title.toString(),
+              widget.googleBookModel.volumeInfo!.title.toString(),
               myTabs,
               context,
               _key),
@@ -37,7 +43,7 @@ class BooksDetail extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      googleBookModel.volumeInfo!.title.toString(),
+                      widget.googleBookModel.volumeInfo!.title.toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -49,12 +55,12 @@ class BooksDetail extends StatelessWidget {
                         fit: BoxFit.fitHeight,
                         placeholder: circularProgressIndicator,
                         image:
-                            'https://covers.openlibrary.org/b/isbn/${googleBookModel.volumeInfo!.industryIdentifiers![0].identifier}-L.jpg'),
+                            'https://covers.openlibrary.org/b/isbn/${widget.googleBookModel.volumeInfo!.industryIdentifiers![0].identifier}-L.jpg'),
                     SizedBox(
                       height: 10,
                     ),
                     Text(
-                      googleBookModel.volumeInfo!.description.toString(),
+                      widget.googleBookModel.volumeInfo!.description.toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -68,10 +74,20 @@ class BooksDetail extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      googleBookModel.volumeInfo!.title.toString(),
+                      widget.googleBookModel.volumeInfo!.title.toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
+                    Slider(
+                      value: _currentSliderValue,
+                      max: 100,
+                      label: _currentSliderValue.round().toString(),
+                      onChanged: (double value) {
+                        setState(() {
+                          _currentSliderValue = value;
+                        });
+                      },
+                    )
                   ],
                 ),
               ),
@@ -87,7 +103,7 @@ class BooksDetail extends StatelessWidget {
           color: Theme.of(context).backgroundColor,
           child: InkWell(
             onTap: () {
-              BooksRepository().removeBookBarcode(googleBookModel
+              BooksRepository().removeBookBarcode(widget.googleBookModel
                   .volumeInfo!.industryIdentifiers![1].identifier);
             },
             child: SizedBox(
@@ -112,8 +128,8 @@ class BooksDetail extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 WishlistRepository().onPressedAddBook(
-                    googleBookModel
-                        .volumeInfo!.industryIdentifiers![1].identifier,
+                    widget.googleBookModel.volumeInfo!.industryIdentifiers![1]
+                        .identifier,
                     context);
               },
               child: SizedBox(
