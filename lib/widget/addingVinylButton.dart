@@ -1,6 +1,9 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
+import 'package:bibliotrack/repositories/vinyls_repository.dart';
+import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/views/MainPage/vinylePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,10 +32,6 @@ class _addButtonState extends State<addViynylsButton> {
     } on PlatformException {
       bookbarcodeScanRes = 'Failed to get platform version.';
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
@@ -42,20 +41,11 @@ class _addButtonState extends State<addViynylsButton> {
       var myInt = int.parse(_scanBookBarcode);
       assert(myInt is int);
 
-      final FirebaseFirestore _store = FirebaseFirestore.instance;
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(AuthenticationHelper().getUid())
-          .update({
-        "barcode": FieldValue.arrayUnion([myInt])
-      }).then((_) {
-        print("success!");
-      });
+      VinylsRepository().addVinylBarcode(myInt);
     }
   }
 
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     myController.dispose();
     super.dispose();
   }
@@ -74,7 +64,7 @@ class _addButtonState extends State<addViynylsButton> {
                     length: 3,
                     child: Scaffold(
                       appBar: AppBar(
-                        backgroundColor: Color(0xff0092A2),
+                        backgroundColor: Theme.of(context).backgroundColor,
                         title: const Text('Recherche : '),
                         bottom: const TabBar(
                           indicator: BoxDecoration(color: Color(0xff2D3142)),
@@ -110,22 +100,23 @@ class _addButtonState extends State<addViynylsButton> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       try {
-                                         var myInt =
-                                           int.parse(myController.text);
+                                        var myInt =
+                                            int.parse(myController.text);
                                         assert(myInt is int);
-                                        _onPressed(myInt);
+                                        VinylsRepository()
+                                            .addVinylBarcode(myInt);
                                       } catch (error) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
                                                 content: Text(
                                                     'Veillez saisir une valeur')));
                                       }
-
                                       Navigator.pop(context);
                                     },
                                     child: const Text('Ajouter'),
                                     style: ElevatedButton.styleFrom(
-                                        primary: Colors.blue[900],
+                                        primary:
+                                            Theme.of(context).indicatorColor,
                                         fixedSize: const Size(200, 50),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -139,10 +130,45 @@ class _addButtonState extends State<addViynylsButton> {
                                     label: Text('Scan vinyle Code Bar'),
                                     onPressed: () {
                                       scanBarcodeNormal();
+                                      Navigator.pushAndRemoveUntil<void>(
+                                          context,
+                                          MaterialPageRoute<void>(
+                                              builder: (BuildContext context) =>
+                                                  VinylePage()),
+                                          ModalRoute.withName('/'));
                                     },
-                                    //child: const Text('Scan du code bar'),
                                     style: ElevatedButton.styleFrom(
-                                        primary: Colors.blue[900],
+                                        primary:
+                                            Theme.of(context).indicatorColor,
+                                        fixedSize: const Size(200, 50),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50))),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextField(),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pushAndRemoveUntil<void>(
+                                          context,
+                                          MaterialPageRoute<void>(
+                                              builder: (BuildContext context) =>
+                                                  VinylePage()),
+                                          ModalRoute.withName('/'));
+                                    },
+                                    child: const Text('Recherche'),
+                                    style: ElevatedButton.styleFrom(
+                                        primary:
+                                            Theme.of(context).indicatorColor,
                                         fixedSize: const Size(200, 50),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -163,28 +189,8 @@ class _addButtonState extends State<addViynylsButton> {
                                     onPressed: () {},
                                     child: const Text('Recherche'),
                                     style: ElevatedButton.styleFrom(
-                                        primary: Colors.blue[900],
-                                        fixedSize: const Size(200, 50),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50))),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextField(),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text('Recherche'),
-                                    style: ElevatedButton.styleFrom(
-                                        primary: Colors.blue[900],
+                                        primary:
+                                            Theme.of(context).indicatorColor,
                                         fixedSize: const Size(200, 50),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -203,24 +209,7 @@ class _addButtonState extends State<addViynylsButton> {
             });
       },
       child: const Icon(Icons.add),
-      backgroundColor: Color(0xff0092A2),
+      backgroundColor: Theme.of(context).backgroundColor,
     );
   }
-}
-
-/**
- * à refacto
- */
-addingModalTab(context, myController) {}
-
-void _onPressed(data) {
-  final FirebaseFirestore _store = FirebaseFirestore.instance;
-  FirebaseFirestore.instance
-      .collection("users")
-      .doc(AuthenticationHelper().getUid())
-      .update({
-    "barcode": FieldValue.arrayUnion([data])
-  }).then((_) {
-    print("success!");
-  });
 }

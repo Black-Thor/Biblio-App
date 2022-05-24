@@ -3,6 +3,9 @@ import 'dart:developer';
 
 import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/resource/apiConstants.dart';
+import 'package:bibliotrack/usecases/convertion.dart';
+import 'package:bibliotrack/utils/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +16,9 @@ List<GoogleBooks> parseProducts(String responseBody) {
       .toList();
 }
 
-class ApiServiceBook {
+final FirebaseFirestore _store = FirebaseFirestore.instance;
+
+class BooksRepository {
   Future<List<GoogleBooks>> findBooksByBarcode(BookBarcode barcode) async {
     var url = Uri.parse(GoogleApiConstants.baseUrl +
         GoogleApiConstants.searchEndPoint +
@@ -51,6 +56,40 @@ class ApiServiceBook {
         ...previousBooks,
         currentBook,
       ];
+    });
+  }
+
+  Future<List<GoogleBooks>> getFrenchBooksOfUser() async {
+    final list = await BooksRepository().findBookBarcodesOfUser();
+    return await getFrenchBooks(list);
+  }
+
+  Future<List<BookBarcode>> findBookBarcodesOfUser() async {
+    final value = await _store
+        .collection("users")
+        .doc(AuthenticationHelper().getUid())
+        .get();
+    print("value of instance : ${value.data()!["BookBarcode"]}");
+    final barcodes = value.data()!["BookBarcode"] as List<dynamic>;
+    return barcodes.map(BookBarcode.fromDynamic).toList();
+  }
+
+  Future<void> addBookBarcode(barcode) async {
+    return _store
+        .collection("users")
+        .doc(AuthenticationHelper().getUid())
+        .update({
+      "BookBarcode": FieldValue.arrayUnion([
+        ConvertionUseCase().ChangeStringToInt(barcode)
+      ])
+    });
+  }
+
+  Future<void> removeBookBarcode(barcode) async {
+    return _store.collection("users").doc(AuthenticationHelper().getUid()).update({
+      "BookBarcode": FieldValue.arrayRemove([
+        ConvertionUseCase().ChangeStringToInt(barcode)
+      ])
     });
   }
 }

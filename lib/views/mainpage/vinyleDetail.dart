@@ -1,7 +1,8 @@
 import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
+import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/views/bookPage/vinylePage.dart';
+import 'package:bibliotrack/views/mainpage/vinylePage.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,8 +13,8 @@ class VinylsDetail extends StatelessWidget {
   VinylsDetail({Key? key, index, required this.VinylsModel}) : super(key: key);
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final List<Tab> myTabs = <Tab>[
-    Tab(text: 'Detail'),
-    Tab(text: 'Note'),
+    const Tab(text: 'Detail'),
+    const Tab(text: 'Note'),
   ];
 
   @override
@@ -97,10 +98,10 @@ class VinylsDetail extends StatelessWidget {
     return Row(
       children: [
         Material(
-          color: const Color(0xffff8989),
+          color: Theme.of(context).backgroundColor,
           child: InkWell(
             onTap: () {},
-            child: const SizedBox(
+            child: SizedBox(
               height: kToolbarHeight,
               width: 200,
               child: Center(
@@ -108,6 +109,7 @@ class VinylsDetail extends StatelessWidget {
                   'Supprimer ',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    color: Theme.of(context).focusColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -117,12 +119,14 @@ class VinylsDetail extends StatelessWidget {
         ),
         Expanded(
           child: Material(
-            color: const Color(0xffff8906),
+            color: Theme.of(context).primaryColor,
             child: InkWell(
               onTap: () {
-                _onPressedAdd(VinylsModel.barcode, context);
+                print(VinylsModel.barcode);
+                // WishlistRepository()
+                //     .onPressedAddVinyl(VinylsModel.barcode, context);
               },
-              child: const SizedBox(
+              child: SizedBox(
                 height: kToolbarHeight,
                 width: double.infinity,
                 child: Center(
@@ -130,6 +134,7 @@ class VinylsDetail extends StatelessWidget {
                     'Ajout à la wishlist',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).focusColor,
                     ),
                   ),
                 ),
@@ -139,47 +144,5 @@ class VinylsDetail extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  void _onPressedDelete(elemets) {
-    var myInt = int.parse(elemets);
-    assert(myInt is int);
-
-    final FirebaseFirestore _store = FirebaseFirestore.instance;
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .update({
-      "barcode": FieldValue.arrayRemove([myInt])
-    }).then((_) {
-      print("success!");
-    });
-  }
-
-  void _onPressedAdd(elemets, context) async {
-    final FirebaseFirestore_store = FirebaseFirestore.instance;
-
-    final value = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .get();
-
-    final barcodes = value.data()!["VinylesWish"] as List<dynamic>;
-    var myInt = int.parse(elemets[0]);
-    assert(myInt is int);
-    
-    if (barcodes.contains(elemets)) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Already in wish list')));
-    } else {
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(AuthenticationHelper().getUid())
-          .update({
-        "VinylesWish": FieldValue.arrayUnion([myInt])
-      }).then((_) {
-        print("success!");
-      });
-    }
   }
 }

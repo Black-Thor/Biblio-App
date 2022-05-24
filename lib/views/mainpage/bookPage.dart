@@ -1,17 +1,17 @@
+import 'package:bibliotrack/usecases/message_scaffold.dart';
 import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/views/bookPage/bookPageDetail.dart';
-import 'package:bibliotrack/widget/addingButton.dart';
+import 'package:bibliotrack/views/mainpage/bookPageDetail.dart';
+import 'package:bibliotrack/widget/addingBookButton.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:bibliotrack/models/bookModel.dart';
-import 'package:bibliotrack/services/book_service.dart';
+import 'package:bibliotrack/repositories/books_repository.dart';
 import 'package:loading_gifs/loading_gifs.dart';
 
 class BookPage extends StatefulWidget {
   BookPage({Key? key}) : super(key: key);
-
   @override
   State<BookPage> createState() => _BookPageState();
 }
@@ -23,38 +23,20 @@ class _BookPageState extends State<BookPage> {
   @override
   void initState() {
     super.initState();
-    _getBook();
-    // TODO: implement initState
-    super.initState();
-    //userInfo si for sidebar data
+    initGetBook();
     AuthenticationHelper().userInfo();
   }
 
-  Future<List<BookBarcode>> listOfBookBarcode() async {
-    final value = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .get();
-    print("value of instance : ${value.data()!["BookBarcode"]}");
-    final barcodes = value.data()!["BookBarcode"] as List<dynamic>;
-    return barcodes.map(BookBarcode.fromDynamic).toList();
-  }
-
-  void _getBook() async {
-    final list = await listOfBookBarcode();
-    try {
-      _googleBookModel = await ApiServiceBook().getFrenchBooks(list);
-    } catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('${error}')));
-    }
-    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+  void initGetBook() {
+    BooksRepository()
+        .getFrenchBooksOfUser()
+        .then((books) => setState(() => _googleBookModel = books))
+        .catchError((error) => MessageScaffold().Scaffold(context, error));
   }
 
   @override
   Widget build(BuildContext context) {
     String Page = "Livres";
-
     return Scaffold(
       key: _key,
       extendBodyBehindAppBar: true,
@@ -123,7 +105,7 @@ class _BookPageState extends State<BookPage> {
                 ),
         ),
       ),
-      floatingActionButton: addButton(),
+      floatingActionButton: addButtonBook(),
     );
   }
 }

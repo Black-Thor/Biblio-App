@@ -1,14 +1,15 @@
 import 'package:bibliotrack/models/userModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
-import 'package:bibliotrack/services/api_service.dart';
-import 'package:bibliotrack/services/vinyle_service.dart';
+import 'package:bibliotrack/repositories/books_repository.dart';
+import 'package:bibliotrack/repositories/vinyls_repository.dart';
+import 'package:bibliotrack/usecases/message_scaffold.dart';
 import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/views/bookPage/vinyleDetail.dart';
-import 'package:bibliotrack/widget/addingVinyls.dart';
+import 'package:bibliotrack/views/mainpage/vinyleDetail.dart';
+import 'package:bibliotrack/widget/addingVinylButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:bibliotrack/widget/addingButton.dart';
+import 'package:bibliotrack/widget/addingBookButton.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:loading_gifs/loading_gifs.dart';
@@ -27,39 +28,14 @@ class _VinylePageState extends State<VinylePage> {
   @override
   void initState() {
     super.initState();
-    _getVinyl();
+    initGetVinyl();
   }
 
-  Future<List<Barcode>> listOfBarcode() async {
-    final value = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .get();
-    print("value of instance : ${value.data()!["barcode"]}");
-
-    final barcodes = value.data()!["barcode"] as List<dynamic>;
-    return barcodes.map(Barcode.fromDynamic).toList();
-  }
-
-  void _getVinyl() async {
-    // barcode.forEach((element) async {
-    //   _discogsModel?.addAll(
-    //       (await ApiServiceVinyle().getFrenchVinyls(element)));
-    // });
-
-    try {
-      final list = await listOfBarcode();
-      _discogsModel = await ApiServiceVinyle().getFrenchVinyls(list);
-      // _discogsModel = barcode
-      //     .expand((element) async =>
-      //         (await ApiServiceVinyle().getFrenchVinyls(barcode)))
-      //     .toList();
-    } catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('${error}')));
-    }
-
-    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+  void initGetVinyl() {
+    VinylsRepository()
+        .getFrenchVinylsOfUser()
+        .then((vinyls) => setState(() => _discogsModel = vinyls))
+        .catchError((error) => MessageScaffold().Scaffold(context, error));
   }
 
   @override

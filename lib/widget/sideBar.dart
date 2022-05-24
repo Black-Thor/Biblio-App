@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/usecases/sign_out.dart';
 import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/utils/firestore.dart';
 import 'package:bibliotrack/views/Login/loginPage.dart';
-import 'package:bibliotrack/views/bookPage/comicsPages.dart';
-import 'package:bibliotrack/views/bookPage/bookPage.dart';
-import 'package:bibliotrack/views/bookPage/vinylePage.dart';
+import 'package:bibliotrack/views/mainpage/comicsPages.dart';
+import 'package:bibliotrack/views/mainpage/bookPage.dart';
+import 'package:bibliotrack/views/mainpage/vinylePage.dart';
 import 'package:bibliotrack/views/wishlist/wishlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -29,7 +31,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
         children: [
           UserAccountsDrawerHeader(
             accountName: GetUserName(uid),
-            accountEmail: Text(AuthenticationHelper().getEmail()),
+            accountEmail: Text(UsersRepository().getEmail()),
             decoration: const BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
@@ -70,7 +72,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
             thickness: 2,
             indent: 20,
             endIndent: 20,
-            color: Color.fromARGB(255, 94, 103, 104),
+            color: Theme.of(context).dividerColor,
           ),
           ListTile(
             leading: Icon(Icons.wallet_giftcard_rounded),
@@ -85,7 +87,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
             thickness: 2,
             indent: 20,
             endIndent: 20,
-            color: Color.fromARGB(255, 94, 103, 104),
+            color: Theme.of(context).dividerColor,
           ),
           ListTile(
             leading: Icon(Icons.settings),
@@ -101,7 +103,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
             thickness: 2,
             indent: 20,
             endIndent: 20,
-            color: Color.fromARGB(255, 94, 103, 104),
+            color: Theme.of(context).dividerColor,
           ),
           ListTile(
             title: Text('Exit'),
@@ -120,12 +122,8 @@ class _CustomSideBarState extends State<CustomSideBar> {
 }
 
 exitApp(BuildContext context) async {
-  // if (Platform.isAndroid) {
-  //   SystemNavigator.pop();
-  // } else if (Platform.isIOS) {
-  //   exit(0);
-  // }
-  AuthenticationHelper().signOut().then((result) {
+
+  SignOutUseCase().signOut().then((result) {
     if (result == null) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
