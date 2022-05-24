@@ -3,15 +3,14 @@ import 'dart:math';
 
 import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
-import 'package:bibliotrack/services/book_service.dart';
-import 'package:bibliotrack/services/vinyle_service.dart';
+import 'package:bibliotrack/repositories/books_repository.dart';
+import 'package:bibliotrack/repositories/vinyls_repository.dart';
+import 'package:bibliotrack/repositories/wishlist_repository.dart';
+import 'package:bibliotrack/usecases/message_scaffold.dart';
 import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/utils/firestore.dart';
-import 'package:bibliotrack/views/bookPage/bookPageDetail.dart';
-import 'package:bibliotrack/views/bookPage/vinyleDetail.dart';
-import 'package:bibliotrack/widget/addingButton.dart';
+import 'package:bibliotrack/views/mainpage/bookPageDetail.dart';
+import 'package:bibliotrack/views/mainpage/vinyleDetail.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:loading_gifs/loading_gifs.dart';
@@ -37,51 +36,26 @@ class _WishListState extends State<WishList> {
     super.initState();
     _getBook();
     _getVinyl();
-    //userInfo si for sidebar data
     AuthenticationHelper().userInfo();
   }
 
-  Future<List<BookBarcode>> listOfBookBarcode() async {
-    final value = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .get();
-    print("value of instance : ${value.data()!["BookWish"]}");
-    final barcodes = value.data()!["BookWish"] as List<dynamic>;
-    return barcodes.map(BookBarcode.fromDynamic).toList();
-  }
-
   void _getBook() async {
-    final list = await listOfBookBarcode();
     try {
-      _googleBookModel = await ApiServiceBook().getFrenchBooks(list);
+      final list = await WishlistRepository().WishedBookFromBarcode();
+      _googleBookModel = await BooksRepository().getFrenchBooks(list);
     } catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('${error}')));
+      MessageScaffold().Scaffold(context, error);
     }
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
 
-  Future<List<Barcode>> listOfBarcode() async {
-    final value = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .get();
-    print("value of instance vinyles: ${value.data()!["VinylesWish"]}");
-
-    final barcodes = value.data()!["VinylesWish"] as List<dynamic>;
-    return barcodes.map(Barcode.fromDynamic).toList();
-  }
-
   void _getVinyl() async {
     try {
-      final list = await listOfBarcode();
-      _discogsModel = await ApiServiceVinyle().getFrenchVinyls(list);
+      final list = await WishlistRepository().WishedVinylFromBarcode();
+      _discogsModel = await VinylsRepository().getFrenchVinyls(list);
     } catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('${error}')));
+      MessageScaffold().Scaffold(context, error);
     }
-
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
 
@@ -158,7 +132,8 @@ class _WishListState extends State<WishList> {
                                     .identifier;
                                 var myInt = int.parse(test!);
                                 assert(myInt is int);
-                                _onPressedDelete(myInt);
+                                WishlistRepository()
+                                    .onPressedDeleteBook(myInt, context);
                               },
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
@@ -228,31 +203,5 @@ class _WishListState extends State<WishList> {
         ),
       ),
     );
-  }
-
-  void _onPressedDelete(elemets) {
-    print(elemets.runtimeType);
-    final FirebaseFirestore _store = FirebaseFirestore.instance;
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .update({
-      "BookWish": FieldValue.arrayRemove([elemets])
-    }).then((_) {
-      print("success!");
-    });
-  }
-
-  void _onPressedDeleteVinyls(elemets) {
-    print(elemets.runtimeType);
-    final FirebaseFirestore _store = FirebaseFirestore.instance;
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .update({
-      "VinylesWish": FieldValue.arrayRemove([elemets])
-    }).then((_) {
-      print("success!");
-    });
   }
 }

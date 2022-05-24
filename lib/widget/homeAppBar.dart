@@ -10,7 +10,7 @@ class CustomAppBar extends AppBar {
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
-          backgroundColor: Color(0xff0092A2),
+          backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "$Page",
             style: TextStyle(
@@ -46,7 +46,7 @@ class CustomAppBarDetails extends AppBar {
             color: Colors.black, //change your color here
           ),
           bottom: TabBar(tabs: tabs),
-          backgroundColor: Color(0xff0092A2),
+          backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "$Page",
             style: TextStyle(
@@ -82,7 +82,7 @@ class CustomAppBarWishlist extends AppBar {
             color: Colors.black, //change your color here
           ),
           bottom: TabBar(tabs: tabs),
-          backgroundColor: Color(0xff0092A2),
+          backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "$Page",
             style: TextStyle(

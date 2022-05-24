@@ -47,6 +47,7 @@ dependencies:
   barcode_widget: ^2.0.2
   flutter_barcode_scanner: ^2.0.0
   flutter_slidable: ^1.2.1
+  flutter_dotenv: ^5.0.2
   
 
 dev_dependencies:
@@ -84,6 +85,8 @@ flutter:
     - assets/onboarding/
     - assets/icon/
     - assets/profile/
+    - .env
+
     
   #   - images/a_dot_ham.jpeg
 

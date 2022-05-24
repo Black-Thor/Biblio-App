@@ -1,3 +1,4 @@
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/views/Register/registerPage.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
@@ -9,7 +10,7 @@ import 'package:bibliotrack/utils/firestore.dart';
 class ProfilePage extends StatelessWidget {
   @override
   String uid = AuthenticationHelper().getUid().toString();
-  String email = AuthenticationHelper().getEmail().toString();
+  String email = UsersRepository().getEmail().toString();
   final profile = [
     'assets/profile/profile1.png',
     'assets/profile/profile2.png',
@@ -22,7 +23,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Color(0xff0092A2),
+        backgroundColor: Theme.of(context).backgroundColor,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
@@ -52,7 +53,7 @@ class ProfilePage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {},
                         child: Text(
-                          AuthenticationHelper().getEmail(),
+                          UsersRepository().getEmail(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 22),
                         ),

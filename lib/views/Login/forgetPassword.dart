@@ -1,5 +1,5 @@
 import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/views/bookPage/bookPage.dart';
+import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

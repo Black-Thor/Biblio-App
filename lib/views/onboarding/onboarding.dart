@@ -18,7 +18,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   void dispose() {
     actualPage.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -62,7 +61,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     borderRadius: BorderRadius.zero,
                   ),
                   primary: Colors.white,
-                  backgroundColor: Color(0xff0092A2),
+                  backgroundColor: Theme.of(context).backgroundColor,
                   minimumSize: const Size.fromHeight(80)),
               onPressed: () async {
                 final showOnBoard = await SharedPreferences.getInstance();

@@ -1,6 +1,8 @@
 import 'package:bibliotrack/models/bookModel.dart';
+import 'package:bibliotrack/repositories/books_repository.dart';
+import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/views/bookPage/bookPage.dart';
+import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,12 +12,15 @@ import 'package:loading_gifs/loading_gifs.dart';
 class BooksDetail extends StatelessWidget {
   BooksDetail({Key? key, index, required this.googleBookModel})
       : super(key: key);
+
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GoogleBooks googleBookModel;
+
   final List<Tab> myTabs = <Tab>[
     Tab(text: 'Detail'),
     Tab(text: 'Note'),
   ];
-  final GoogleBooks googleBookModel;
+
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: myTabs.length,
@@ -28,7 +33,7 @@ class BooksDetail extends StatelessWidget {
           bottomNavigationBar: detailsButton(context),
           body: TabBarView(
             children: <Widget>[
-              Container(
+              SingleChildScrollView(
                 child: Column(
                   children: [
                     Text(
@@ -79,13 +84,13 @@ class BooksDetail extends StatelessWidget {
     return Row(
       children: [
         Material(
-          color: const Color(0xffff8989),
+          color: Theme.of(context).backgroundColor,
           child: InkWell(
             onTap: () {
-              _onPressedDelete(googleBookModel
+              BooksRepository().removeBookBarcode(googleBookModel
                   .volumeInfo!.industryIdentifiers![1].identifier);
             },
-            child: const SizedBox(
+            child: SizedBox(
               height: kToolbarHeight,
               width: 200,
               child: Center(
@@ -94,6 +99,7 @@ class BooksDetail extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).focusColor,
                   ),
                 ),
               ),
@@ -102,15 +108,15 @@ class BooksDetail extends StatelessWidget {
         ),
         Expanded(
           child: Material(
-            color: const Color(0xffff8906),
+            color: Theme.of(context).primaryColor,
             child: InkWell(
               onTap: () {
-                _onPressedAdd(
+                WishlistRepository().onPressedAddBook(
                     googleBookModel
                         .volumeInfo!.industryIdentifiers![1].identifier,
                     context);
               },
-              child: const SizedBox(
+              child: SizedBox(
                 height: kToolbarHeight,
                 width: double.infinity,
                 child: Center(
@@ -118,6 +124,7 @@ class BooksDetail extends StatelessWidget {
                     'Ajout à la wishlist',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).focusColor,
                     ),
                   ),
                 ),
@@ -127,46 +134,5 @@ class BooksDetail extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  void _onPressedDelete(elemets) {
-    var myInt = int.parse(elemets);
-    assert(myInt is int);
-
-    final FirebaseFirestore _store = FirebaseFirestore.instance;
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .update({
-      "BookBarcode": FieldValue.arrayRemove([myInt])
-    }).then((_) {
-      print("success!");
-    });
-  }
-
-  void _onPressedAdd(elemets, context) async {
-    final FirebaseFirestore _store = FirebaseFirestore.instance;
-    var myInt = int.parse(elemets);
-    assert(myInt is int);
-
-    final value = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .get();
-    final barcodes = value.data()!["BookWish"] as List<dynamic>;
-
-    if (barcodes.contains(myInt)) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Already in wish list')));
-    } else {
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(AuthenticationHelper().getUid())
-          .update({
-        "BookWish": FieldValue.arrayUnion([myInt])
-      }).then((_) {
-        print("success!");
-      });
-    }
   }
 }

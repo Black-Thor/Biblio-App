@@ -19,25 +19,25 @@ class Discogs {
   }
 }
 
-class Barcode {
+class VinylBarcode {
   final int code;
 
-  Barcode(
+  VinylBarcode(
     this.code,
   );
 
-  factory Barcode.fromDynamic(dynamic barcode) {
-    return Barcode(barcode);
+  factory VinylBarcode.fromDynamic(dynamic barcode) {
+    return VinylBarcode(barcode);
   }
 }
 
 class BarcodeCollection extends Iterable {
-  final Iterable<Barcode> _barcodeCollection;
+  final Iterable<VinylBarcode> _barcodeCollection;
 
   BarcodeCollection(this._barcodeCollection);
 
   factory BarcodeCollection.fromDynamicList(Iterable<dynamic> barcodes) {
-    return BarcodeCollection(barcodes.map(Barcode.fromDynamic));
+    return BarcodeCollection(barcodes.map(VinylBarcode.fromDynamic));
   }
 
   @override

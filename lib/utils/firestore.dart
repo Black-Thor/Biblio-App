@@ -2,12 +2,12 @@ import 'package:bibliotrack/utils/firebase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
+final FirebaseFirestore _store = FirebaseFirestore.instance;
+
 class CollectionHelper {
-  final FirebaseFirestore _store = FirebaseFirestore.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Future userData({required String uid, required String username}) async {
-    // Call the user's CollectionReference to add a new user
     return users
         .add({
           'uid': uid,
@@ -40,7 +40,7 @@ class GetUserName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    CollectionReference users = _store.collection('users');
 
     return FutureBuilder<DocumentSnapshot>(
       future: users.doc(documentId).get(),
@@ -74,7 +74,7 @@ class finduser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    CollectionReference users = _store.collection('users');
 
     return FutureBuilder(
       future: users.where('username', isEqualTo: '${username}').get(),
