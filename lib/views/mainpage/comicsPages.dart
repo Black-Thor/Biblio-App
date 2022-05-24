@@ -20,6 +20,8 @@ class ComicsPage extends StatefulWidget {
 
 class _ComicsPageState extends State<ComicsPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  double _currentSliderValue = 20;
+
   @override
   Widget build(BuildContext context) {
     String Page = "Comics";
@@ -28,11 +30,48 @@ class _ComicsPageState extends State<ComicsPage> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(Page, context, _key),
       drawer: CustomSideBar(),
-      body: Center(
-        child: Text(
-          "Work In Progress",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-        ),
+      body: Column(
+        children: [
+          Center(
+            child: Text(
+              "Work In Progress",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
+          ),
+          Center(
+            child: Text(
+              "Work In Progress",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
+          ),
+          Center(
+            child: Text(
+              "Work In Progress",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
+          ),
+          Center(
+            child: Text(
+              "Work In Progress",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
+          ),
+          Center(
+            child: Text(
+              "Work In Progress",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
+          ),
+          Slider(
+              value: _currentSliderValue,
+              max: 100,
+              label: _currentSliderValue.round().toString(),
+              onChanged: (double value) {
+                setState(() {
+                  _currentSliderValue = value;
+                });
+              })
+        ],
       ),
       floatingActionButton: addButtonBook(),
     );

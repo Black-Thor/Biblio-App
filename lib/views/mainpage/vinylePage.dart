@@ -1,4 +1,3 @@
-import 'package:bibliotrack/models/userModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/books_repository.dart';
 import 'package:bibliotrack/repositories/vinyls_repository.dart';
@@ -42,8 +41,7 @@ class _VinylePageState extends State<VinylePage> {
   Widget build(BuildContext context) {
     String Page = "Vinyle";
     return Scaffold(
-      key: _key,
-      extendBodyBehindAppBar: true,
+      key: _key,      extendBodyBehindAppBar: true,
       appBar: CustomAppBar(Page, context, _key),
       drawer: CustomSideBar(),
       body: SingleChildScrollView(

@@ -1,16 +1,20 @@
+import 'dart:math';
 import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/utils/firebase.dart';
 import 'package:bibliotrack/views/Register/registerPage.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-
 import 'package:bibliotrack/utils/firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
   String uid = AuthenticationHelper().getUid().toString();
   String email = UsersRepository().getEmail().toString();
+  Random random = new Random();
+
   final profile = [
     'assets/profile/profile1.png',
     'assets/profile/profile2.png',
@@ -149,7 +153,7 @@ class ProfilePage extends StatelessWidget {
               backgroundColor: Colors.black54,
               child: IconButton(
                 icon: Icon(
-                  Icons.edit,
+                  Icons.shuffle,
                   color: Colors.white,
                 ),
                 onPressed: () {},
