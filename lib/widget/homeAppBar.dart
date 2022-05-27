@@ -74,14 +74,14 @@ class CustomAppBarDetails extends AppBar {
 }
 
 class CustomAppBarWishlist extends AppBar {
-  CustomAppBarWishlist(Page, tabs, context, GlobalKey<ScaffoldState> skey,
+  CustomAppBarWishlist(controller , Page, tabs, context, GlobalKey<ScaffoldState> skey, 
       {Key? key})
       : super(
           key: key,
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
-          bottom: TabBar(tabs: tabs),
+          bottom: TabBar(tabs: tabs , controller: controller ,),
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "$Page",

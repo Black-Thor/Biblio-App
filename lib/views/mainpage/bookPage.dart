@@ -31,7 +31,8 @@ class _BookPageState extends State<BookPage> {
     BooksRepository()
         .getFrenchBooksOfUser()
         .then((books) => setState(() => _googleBookModel = books))
-        .catchError((error) => MessageScaffold().Scaffold(context, error));
+        .catchError(
+            (error) => MessageScaffold().messageToSnackBar(context, error));
   }
 
   @override
