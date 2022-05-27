@@ -1,7 +1,7 @@
 import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/views/mainpage/vinylePage.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';

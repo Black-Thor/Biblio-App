@@ -1,20 +1,16 @@
 import 'dart:math';
 import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/usecases/passwordReset.dart';
 import 'package:bibliotrack/views/Register/registerPage.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:bibliotrack/utils/firestore.dart';
+import 'package:bibliotrack/widget/currentUsername.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatelessWidget {
-  @override
-  String uid = AuthenticationHelper().getUid().toString();
-  String email = UsersRepository().getEmail().toString();
-  Random random = new Random();
-
   final profile = [
     'assets/profile/profile1.png',
     'assets/profile/profile2.png',
@@ -57,7 +53,7 @@ class ProfilePage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {},
                         child: Text(
-                          UsersRepository().getEmail(),
+                          UsersRepository().getCurrentUserEmail(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 22),
                         ),
@@ -74,7 +70,7 @@ class ProfilePage extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {},
-                        child: GetUserName(uid),
+                        child: CurrentUsername(),
                         style: ElevatedButton.styleFrom(
                           primary: Color(0xff0092A2),
                           shape: RoundedRectangleBorder(
@@ -88,8 +84,7 @@ class ProfilePage extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          AuthenticationHelper().passwordReset(email, context);
-                          print("object");
+                          PasswordResetButton().passwordReset(email, context);
                         },
                         child: const Text(
                           'Reset du mot de passe',

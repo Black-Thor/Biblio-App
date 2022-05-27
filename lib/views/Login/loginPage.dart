@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:bibliotrack/usecases/sign_in.dart';
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/views/Login/forgetPasswordLink.dart';
 import 'package:bibliotrack/views/Login/input.dart';
 import 'package:bibliotrack/views/Login/emailTextField.dart';
@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    // TODO: rename this to AuthenticationGuard.redirectIfUserIsLogged()
     AuthenticationHelper().Logged(context);
   }
 

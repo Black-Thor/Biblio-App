@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/usecases/sign_out.dart';
-import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/utils/firestore.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/widget/currentUsername.dart';
 import 'package:bibliotrack/views/Login/loginPage.dart';
 import 'package:bibliotrack/views/mainpage/comicsPages.dart';
 import 'package:bibliotrack/views/mainpage/bookPage.dart';
@@ -21,8 +21,6 @@ class CustomSideBar extends StatefulWidget {
 }
 
 class _CustomSideBarState extends State<CustomSideBar> {
-  // const CustomSideBar({Key? key}) : super(key: key);
-  String uid = AuthenticationHelper().getUid().toString();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -30,8 +28,8 @@ class _CustomSideBarState extends State<CustomSideBar> {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: GetUserName(uid),
-            accountEmail: Text(UsersRepository().getEmail()),
+            accountName: CurrentUsername(),
+            accountEmail: Text(UsersRepository().getCurrentUserEmail()),
             decoration: const BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
@@ -122,7 +120,6 @@ class _CustomSideBarState extends State<CustomSideBar> {
 }
 
 exitApp(BuildContext context) async {
-
   SignOutUseCase().signOut().then((result) {
     if (result == null) {
       Navigator.pushReplacement(

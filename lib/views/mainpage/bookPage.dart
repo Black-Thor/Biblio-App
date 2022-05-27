@@ -1,5 +1,5 @@
-import 'package:bibliotrack/usecases/message_scaffold.dart';
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/resource/message_scaffold.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/views/mainpage/bookPageDetail.dart';
 import 'package:bibliotrack/widget/addingBookButton.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';

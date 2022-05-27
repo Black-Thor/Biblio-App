@@ -1,8 +1,8 @@
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/books_repository.dart';
 import 'package:bibliotrack/repositories/vinyls_repository.dart';
-import 'package:bibliotrack/usecases/message_scaffold.dart';
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/resource/message_scaffold.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/views/mainpage/vinyleDetail.dart';
 import 'package:bibliotrack/widget/addingVinylButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

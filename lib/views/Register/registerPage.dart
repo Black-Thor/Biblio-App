@@ -1,10 +1,11 @@
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/usecases/sign_up.dart';
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils/firestore.dart';
+import '../../widget/currentUsername.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -116,7 +117,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       await FirebaseAuth.instance.currentUser!;
                                   var uid = user.uid;
                                   print(uid);
-                                  CollectionHelper().addUser(
+                                  UsersRepository().addUser(
                                       uid: uid,
                                       username: nickName.text.toString());
                                   Navigator.pushReplacement(
