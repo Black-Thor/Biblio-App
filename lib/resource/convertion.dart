@@ -1,12 +1,12 @@
-class ConvertionUseCase {
+class Convertion {
   ChangeStringToInt(data) {
     var myInt = int.parse(data);
     assert(myInt is int);
     return myInt;
   }
 
-  ChangeListToInt(data) {
-    var myInt = int.parse(data);
+  ChangeListToInt(List data) {
+    var myInt = int.parse(data[0]);
     assert(myInt is int);
   }
 }

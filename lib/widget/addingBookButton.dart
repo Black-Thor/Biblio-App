@@ -2,9 +2,9 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/books_repository.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
-import 'package:bibliotrack/usecases/convertion.dart';
-import 'package:bibliotrack/usecases/message_scaffold.dart';
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/resource/convertion.dart';
+import 'package:bibliotrack/resource/message_scaffold.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,7 +40,7 @@ class _addButtonBookState extends State<addButtonBook> {
     });
     var hasBarCode = _scanBookBarcode.isNotEmpty && _scanBookBarcode != "-1";
     if (hasBarCode) {
-      int bookbarcode = ConvertionUseCase().ChangeStringToInt(_scanBookBarcode);
+      int bookbarcode = Convertion().ChangeStringToInt(_scanBookBarcode);
       await BooksRepository().addBookBarcode(bookbarcode);
     }
   }

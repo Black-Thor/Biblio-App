@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/utils/firestore.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/widget/addingBookButton.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

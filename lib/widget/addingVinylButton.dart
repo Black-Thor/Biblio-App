@@ -2,7 +2,7 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/vinyls_repository.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/views/MainPage/vinylePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/resource/apiConstants.dart';
-import 'package:bibliotrack/usecases/convertion.dart';
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/resource/convertion.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +17,7 @@ List<Discogs> parseProducts(String responseBody) {
       .toList();
 }
 
-final FirebaseFirestore _store = FirebaseFirestore.instance;
+UsersRepository usersRepository = new UsersRepository();
 
 class VinylsRepository {
   Future<List<Discogs>> findVinylsByBarcode(VinylBarcode barcode) async {
@@ -63,11 +63,8 @@ class VinylsRepository {
   }
 
   Future<List<VinylBarcode>> findVinylBarcodesOfUser() async {
-    final value = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthenticationHelper().getUid())
-        .get();
-    print("value of instance : ${value.data()!["VinylesBarcode"]}");
+    final value = await usersRepository.getCurrentUser();
+  //  print("value of instance : ${value.data()!["VinylesBarcode"]}");
 
     final barcodes = value.data()!["VinylesBarcode"] as List<dynamic>;
     return barcodes.map(VinylBarcode.fromDynamic).toList();
@@ -79,18 +76,16 @@ class VinylsRepository {
   }
 
   Future<void> addVinylBarcode(barcode) {
-    return _store.collection("users").doc(AuthenticationHelper().getUid()).update({
-      "VinylesBarcode": FieldValue.arrayUnion([
-        ConvertionUseCase().ChangeStringToInt(barcode)
-      ])
+    return usersRepository.updateCurrentUser({
+      "VinylesBarcode":
+          FieldValue.arrayUnion([Convertion().ChangeStringToInt(barcode)])
     });
   }
 
   Future<void> removeVinylBarcode(barcode) {
-    return _store.collection("users").doc(AuthenticationHelper().getUid()).update({
-      "VinylesBarcode": FieldValue.arrayRemove([
-        ConvertionUseCase().ChangeStringToInt(barcode)
-      ])
+    return usersRepository.updateCurrentUser({
+      "VinylesBarcode":
+          FieldValue.arrayRemove([Convertion().ChangeStringToInt(barcode)])
     });
   }
 }
