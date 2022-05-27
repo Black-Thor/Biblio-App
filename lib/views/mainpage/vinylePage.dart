@@ -34,14 +34,16 @@ class _VinylePageState extends State<VinylePage> {
     VinylsRepository()
         .getFrenchVinylsOfUser()
         .then((vinyls) => setState(() => _discogsModel = vinyls))
-        .catchError((error) => MessageScaffold().Scaffold(context, error));
+        .catchError(
+            (error) => MessageScaffold().messageToSnackBar(context, error));
   }
 
   @override
   Widget build(BuildContext context) {
     String Page = "Vinyle";
     return Scaffold(
-      key: _key,      extendBodyBehindAppBar: true,
+      key: _key,
+      extendBodyBehindAppBar: true,
       appBar: CustomAppBar(Page, context, _key),
       drawer: CustomSideBar(),
       body: SingleChildScrollView(

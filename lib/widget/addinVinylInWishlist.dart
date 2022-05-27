@@ -10,15 +10,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class addViynylsButton extends StatefulWidget {
-  addViynylsButton({Key? key}) : super(key: key);
+class AddVinylInWishlist extends StatefulWidget {
+  AddVinylInWishlist({Key? key}) : super(key: key);
 
   @override
-  State<addViynylsButton> createState() => _addButtonState();
+  State<AddVinylInWishlist> createState() => _AddVinylInWishlistState();
 }
 
-class _addButtonState extends State<addViynylsButton> {
+class _AddVinylInWishlistState extends State<AddVinylInWishlist> {
   String _scanBookBarcode = '';
   final myController = TextEditingController();
 
@@ -50,6 +51,18 @@ class _addButtonState extends State<addViynylsButton> {
     super.dispose();
   }
 
+  final List<Tab> myTabs = <Tab>[
+    Tab(
+      text: 'ISBN ',
+    ),
+    Tab(
+      text: 'mot',
+    ),
+    Tab(
+      text: ' Manuelle',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
@@ -61,21 +74,14 @@ class _addButtonState extends State<addViynylsButton> {
                 child: Container(
                   constraints: BoxConstraints(maxHeight: 350),
                   child: DefaultTabController(
-                    length: 2,
+                    length: myTabs.length,
                     child: Scaffold(
                       appBar: AppBar(
                         backgroundColor: Theme.of(context).backgroundColor,
                         title: const Text('Recherche : '),
-                        bottom: const TabBar(
+                        bottom: TabBar(
                           indicator: BoxDecoration(color: Color(0xff2D3142)),
-                          tabs: <Widget>[
-                            Tab(
-                              text: 'ISBN ',
-                            ),
-                            Tab(
-                              text: 'Numero de catalogue',
-                            ),
-                          ],
+                          tabs: myTabs,
                         ),
                       ),
                       body: TabBarView(
@@ -97,16 +103,12 @@ class _addButtonState extends State<addViynylsButton> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       try {
-                                        var myInt =
-                                            int.parse(myController.text);
-                                        assert(myInt is int);
                                         VinylsRepository()
-                                            .addVinylBarcode(myInt);
+                                            .addVinylBarcode(myController.text);
                                       } catch (error) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    'Veillez saisir une valeur')));
+                                                content: Text('${error}')));
                                       }
                                       Navigator.pop(context);
                                     },
@@ -176,28 +178,28 @@ class _addButtonState extends State<addViynylsButton> {
                               ],
                             ),
                           ),
-                          // Container(
-                          //   child: Column(
-                          //     mainAxisAlignment: MainAxisAlignment.end,
-                          //     children: [
-                          //       TextField(),
-                          //       Padding(
-                          //         padding: const EdgeInsets.all(8.0),
-                          //         child: ElevatedButton(
-                          //           onPressed: () {},
-                          //           child: const Text('Recherche'),
-                          //           style: ElevatedButton.styleFrom(
-                          //               primary:
-                          //                   Theme.of(context).indicatorColor,
-                          //               fixedSize: const Size(200, 50),
-                          //               shape: RoundedRectangleBorder(
-                          //                   borderRadius:
-                          //                       BorderRadius.circular(50))),
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
+                          Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextField(),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    onPressed: null,
+                                    child: const Text('Recherche'),
+                                    style: ElevatedButton.styleFrom(
+                                        primary:
+                                            Theme.of(context).indicatorColor,
+                                        fixedSize: const Size(200, 50),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50))),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -206,7 +208,7 @@ class _addButtonState extends State<addViynylsButton> {
               );
             });
       },
-      child: const Icon(Icons.add),
+      child: const FaIcon(FontAwesomeIcons.recordVinyl),
       backgroundColor: Theme.of(context).backgroundColor,
     );
   }

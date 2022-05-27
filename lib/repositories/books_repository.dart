@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/resource/apiConstants.dart';
 import 'package:bibliotrack/resource/convertion.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/resource/message_scaffold.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 List<GoogleBooks> parseProducts(String responseBody) {
@@ -17,7 +16,12 @@ List<GoogleBooks> parseProducts(String responseBody) {
 }
 
 class BooksRepository {
-  UsersRepository usersRepository = new UsersRepository();
+  UsersRepository usersRepository = UsersRepository();
+
+  Future<GoogleBooks> findBookByBarcode(BookBarcode barcode) async {
+    var booksFinded = await findBooksByBarcode(barcode);
+    return booksFinded.first; 
+  }
 
   Future<List<GoogleBooks>> findBooksByBarcode(BookBarcode barcode) async {
     var url = Uri.parse(GoogleApiConstants.baseUrl +
@@ -77,10 +81,13 @@ class BooksRepository {
     });
   }
 
-  Future<void> removeBookBarcode(barcode) async {
+  Future<void> removeBookBarcode(context, barcode) async {
     return usersRepository.updateCurrentUser({
       "BookBarcode":
           FieldValue.arrayRemove([Convertion().ChangeStringToInt(barcode)])
+    }).then((_) {
+      MessageScaffold().warningSnackbar(context, "👋 Adieu petit livre",
+          "Ce livrer à été retirer de votre bibiliothéque");
     });
   }
 }

@@ -13,6 +13,7 @@ import 'package:bibliotrack/views/wishlist/wishlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomSideBar extends StatefulWidget {
@@ -39,7 +40,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.menu_book),
+            leading: const FaIcon(FontAwesomeIcons.book),
             title: Text('Livres'),
             onTap: () {
               //userInfo();
@@ -49,7 +50,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.person),
+            leading: const FaIcon(FontAwesomeIcons.mask),
             title: Text('BD / Comics'),
             onTap: () {
               Navigator.pop(context);
@@ -58,7 +59,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.share),
+            leading: const FaIcon(FontAwesomeIcons.recordVinyl),
             title: Text('Vinyle'),
             onTap: () {
               Navigator.pop(context);

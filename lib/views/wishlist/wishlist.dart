@@ -10,6 +10,11 @@ import 'package:bibliotrack/resource/message_scaffold.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/views/mainpage/bookPageDetail.dart';
 import 'package:bibliotrack/views/mainpage/vinyleDetail.dart';
+import 'package:bibliotrack/views/wishlist/wishlistBookDetail.dart';
+import 'package:bibliotrack/views/wishlist/wishlistVinyleDetail.dart';
+import 'package:bibliotrack/widget/addinVinylInWishlist.dart';
+import 'package:bibliotrack/widget/addingBookButton.dart';
+import 'package:bibliotrack/widget/addingBookInWishlist.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
@@ -22,7 +27,7 @@ class WishList extends StatefulWidget {
   State<WishList> createState() => _WishListState();
 }
 
-class _WishListState extends State<WishList> {
+class _WishListState extends State<WishList> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final List<Tab> myTabs = <Tab>[
     Tab(text: 'Livres'),
@@ -30,6 +35,7 @@ class _WishListState extends State<WishList> {
   ];
   late List<GoogleBooks> _googleBookModel = [];
   late List<Discogs> _discogsModel = [];
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -37,24 +43,41 @@ class _WishListState extends State<WishList> {
     _getBook();
     _getVinyl();
     AuthenticationHelper().userInfo();
+
+    super.initState();
+    _tabController =
+        TabController(length: myTabs.length, vsync: this, initialIndex: 0);
+    _tabController.addListener(_handleTabIndex);
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabIndex);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _handleTabIndex() {
+    setState(() {});
   }
 
   void _getBook() async {
     try {
-      final list = await WishlistRepository().WishedBookFromBarcode();
+      final list =
+          await WishlistRepository().getSavedBookInWishlistOfCurrentUser();
       _googleBookModel = await BooksRepository().getFrenchBooks(list);
     } catch (error) {
-      MessageScaffold().Scaffold(context, error);
+      MessageScaffold().messageToSnackBar(context, error);
     }
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
 
   void _getVinyl() async {
     try {
-      final list = await WishlistRepository().WishedVinylFromBarcode();
+      final list = await WishlistRepository().wishedVinylFromBarcode();
       _discogsModel = await VinylsRepository().getFrenchVinyls(list);
     } catch (error) {
-      MessageScaffold().Scaffold(context, error);
+      MessageScaffold().messageToSnackBar(context, error);
     }
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
@@ -66,9 +89,11 @@ class _WishListState extends State<WishList> {
       length: myTabs.length,
       child: Scaffold(
         key: _key,
-        appBar: CustomAppBarWishlist(Page, myTabs, context, _key),
+        appBar:
+            CustomAppBarWishlist(_tabController, Page, myTabs, context, _key),
         drawer: CustomSideBar(),
         body: TabBarView(
+          controller: _tabController,
           children: <Widget>[
             SingleChildScrollView(
               child: Container(
@@ -125,19 +150,9 @@ class _WishListState extends State<WishList> {
                                     image:
                                         'https://covers.openlibrary.org/b/isbn/${_googleBookModel[index].volumeInfo!.industryIdentifiers![0].identifier}-L.jpg'),
                               ),
-                              onLongPress: () {
-                                String? test = _googleBookModel[index]
-                                    .volumeInfo!
-                                    .industryIdentifiers![1]
-                                    .identifier;
-                                var myInt = int.parse(test!);
-                                assert(myInt is int);
-                                WishlistRepository()
-                                    .onPressedDeleteBook(myInt, context);
-                              },
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => BooksDetail(
+                                    builder: (context) => WishlistBooksDetail(
                                           googleBookModel:
                                               _googleBookModel[index],
                                         )));
@@ -190,7 +205,7 @@ class _WishListState extends State<WishList> {
                             onLongPress: () {},
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => VinylsDetail(
+                                  builder: (context) => WishlistVinylsDetail(
                                         VinylsModel: _discogsModel[index],
                                       )));
                             },
@@ -201,7 +216,14 @@ class _WishListState extends State<WishList> {
             ),
           ],
         ),
+        floatingActionButton: _bottomButtons(),
       ),
     );
+  }
+
+  Widget _bottomButtons() {
+    return _tabController.index == 0
+        ? AddBookInWishlist()
+        : AddVinylInWishlist();
   }
 }

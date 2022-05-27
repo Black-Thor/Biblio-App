@@ -5,6 +5,7 @@ import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/resource/convertion.dart';
 import 'package:bibliotrack/resource/message_scaffold.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/resource/redirectNavigator.dart';
 import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,6 +51,15 @@ class _addButtonBookState extends State<addButtonBook> {
     super.dispose();
   }
 
+  final List<Tab> myTabs = <Tab>[
+    Tab(
+      text: 'ISBN ',
+    ),
+    Tab(
+      text: 'mot',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
@@ -61,7 +71,7 @@ class _addButtonBookState extends State<addButtonBook> {
                 child: Container(
                   constraints: BoxConstraints(maxHeight: 350),
                   child: DefaultTabController(
-                    length: 3,
+                    length: myTabs.length,
                     child: Scaffold(
                       appBar: AppBar(
                         backgroundColor: Theme.of(context).backgroundColor,
@@ -69,17 +79,7 @@ class _addButtonBookState extends State<addButtonBook> {
                         bottom: TabBar(
                           indicator: BoxDecoration(
                               color: Theme.of(context).indicatorColor),
-                          tabs: <Widget>[
-                            Tab(
-                              text: 'ISBN ',
-                            ),
-                            Tab(
-                              text: 'par Mot',
-                            ),
-                            Tab(
-                              text: ' Manuelle',
-                            ),
-                          ],
+                          tabs: myTabs,
                         ),
                       ),
                       body: TabBarView(
@@ -101,19 +101,14 @@ class _addButtonBookState extends State<addButtonBook> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       if (myController.text.isEmpty) {
-                                        MessageScaffold().Scaffold(
+                                        MessageScaffold().messageToSnackBar(
                                             context, "Please Enter some value");
                                       } else {
                                         BooksRepository()
                                             .addBookBarcode(myController.text);
                                         Navigator.pop(context);
-                                        Navigator.pushAndRemoveUntil<void>(
-                                          context,
-                                          MaterialPageRoute<void>(
-                                              builder: (BuildContext context) =>
-                                                  BookPage()),
-                                          ModalRoute.withName('/'),
-                                        );
+                                        RedirectTO()
+                                            .RedirectToBookPage(context);
                                       }
                                     },
                                     child: const Text('Ajouter'),
@@ -133,12 +128,7 @@ class _addButtonBookState extends State<addButtonBook> {
                                     label: Text('Scan Code Bar'),
                                     onPressed: () {
                                       scanBarcodeNormal();
-                                      Navigator.pushAndRemoveUntil<void>(
-                                          context,
-                                          MaterialPageRoute<void>(
-                                              builder: (BuildContext context) =>
-                                                  BookPage()),
-                                          ModalRoute.withName('/'));
+                                      RedirectTO().RedirectToBookPage(context);
                                     },
                                     //child: const Text('Scan du code bar'),
                                     style: ElevatedButton.styleFrom(
@@ -157,33 +147,25 @@ class _addButtonBookState extends State<addButtonBook> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                TextField(),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text('Recherche'),
-                                    style: ElevatedButton.styleFrom(
-                                        primary:
-                                            Theme.of(context).indicatorColor,
-                                        fixedSize: const Size(200, 50),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50))),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Auteur',
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextField(),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Nom du livre',
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: null,
                                     child: const Text('Recherche'),
                                     style: ElevatedButton.styleFrom(
                                         primary:

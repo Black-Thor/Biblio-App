@@ -1,3 +1,5 @@
+import 'package:bibliotrack/resource/convertion.dart';
+
 class GoogleBooks {
   final String id;
   final VolumeInfo? volumeInfo;
@@ -11,6 +13,10 @@ class GoogleBooks {
   }
   factory GoogleBooks.fromJson(Map<String, dynamic> json) {
     return GoogleBooks(json['etag'], VolumeInfo.fromJson(json['volumeInfo']));
+  }
+
+  getISBN13() {
+    return this.volumeInfo!.getISBN13();
   }
 }
 
@@ -42,6 +48,10 @@ class VolumeInfo {
 
     return VolumeInfo(json['title'], json['authors'], json['publishedDate'],
         json['description'], Identifier);
+  }
+
+  getISBN13() {
+    return this.industryIdentifiers!.last.identifier;
   }
 }
 
@@ -85,6 +95,10 @@ class BookBarcode {
 
   factory BookBarcode.fromDynamic(dynamic barcode) {
     return BookBarcode(barcode);
+  }
+
+  factory BookBarcode.fromString(String barcode) {
+    return BookBarcode(Convertion().ChangeStringToInt(barcode));
   }
 }
 

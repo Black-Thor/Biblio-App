@@ -121,17 +121,13 @@ class VinylsDetail extends StatelessWidget {
           child: Material(
             color: Theme.of(context).primaryColor,
             child: InkWell(
-              onTap: () {
-                print(VinylsModel.barcode);
-                // WishlistRepository()
-                //     .onPressedAddVinyl(VinylsModel.barcode, context);
-              },
+              onTap: () {},
               child: SizedBox(
                 height: kToolbarHeight,
                 width: double.infinity,
                 child: Center(
                   child: Text(
-                    'Ajout à la wishlist',
+                    'Marquer comme preter',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).focusColor,
