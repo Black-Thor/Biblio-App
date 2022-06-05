@@ -1,7 +1,10 @@
 import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
+import 'package:bibliotrack/repositories/vinyls_repository.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/resource/message_scaffold.dart';
+import 'package:bibliotrack/resource/redirectNavigator.dart';
 import 'package:bibliotrack/views/mainpage/vinylePage.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
@@ -100,7 +103,24 @@ class VinylsDetail extends StatelessWidget {
         Material(
           color: Theme.of(context).backgroundColor,
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              try {
+                VinylsRepository()
+                    .removeVinylBarcode(VinylsModel.barcode![0])
+                    .then((_) {
+                  MessageScaffold().warningSnackbar(
+                      context,
+                      "👋 Adieu petit Vinyl",
+                      "Ce vinyl à été retirer de votre bibiliothéque");
+                });
+                Future.delayed(Duration(milliseconds: 3000), () {
+                  RedirectTO().RedirectToVinylPage(context);
+                });
+              } catch (error) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('${error}')));
+              }
+            },
             child: SizedBox(
               height: kToolbarHeight,
               width: 200,

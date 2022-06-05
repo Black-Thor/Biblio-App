@@ -11,19 +11,16 @@ import 'package:http/http.dart' as http;
 
 List<Discogs> parseProducts(String responseBody) {
   final parsed = json.decode(responseBody);
-
-  return parsed["results"]
-      .map<Discogs>((json) => Discogs.fromJson(json))
-      .toList();
+  return parsed["results"].map<Discogs>(Discogs.fromDynamic).toList();
 }
 
-UsersRepository usersRepository = new UsersRepository();
-
 class VinylsRepository {
+  UsersRepository usersRepository = UsersRepository();
+
   Future<List<Discogs>> findVinylsByBarcode(VinylBarcode barcode) async {
     var url = Uri.parse(VinyleApiConstants.baseUrl +
         VinyleApiConstants.searchEndPoint +
-        barcode.code.toString() +
+        barcode.code +
         VinyleApiConstants.auth +
         VinyleApiConstants.rule);
 
@@ -63,11 +60,7 @@ class VinylsRepository {
   }
 
   Future<List<VinylBarcode>> findVinylBarcodesOfUser() async {
-    final value = await usersRepository.getCurrentUser();
-  //  print("value of instance : ${value.data()!["VinylesBarcode"]}");
-
-    final barcodes = value.data()!["VinylesBarcode"] as List<dynamic>;
-    return barcodes.map(VinylBarcode.fromDynamic).toList();
+    return (await usersRepository.getCurrentUser()).vinylBarcodes;
   }
 
   Future<List<Discogs>> getFrenchVinylsOfUser() async {
@@ -77,15 +70,19 @@ class VinylsRepository {
 
   Future<void> addVinylBarcode(barcode) {
     return usersRepository.updateCurrentUser({
-      "VinylesBarcode":
-          FieldValue.arrayUnion([Convertion().ChangeStringToInt(barcode)])
+      "VinylesBarcode": FieldValue.arrayUnion([barcode])
+    });
+  }
+
+  Future<void> addVinylInWishlistBarcode(barcode) {
+    return usersRepository.updateCurrentUser({
+      "VinylesWish": FieldValue.arrayUnion([barcode])
     });
   }
 
   Future<void> removeVinylBarcode(barcode) {
     return usersRepository.updateCurrentUser({
-      "VinylesBarcode":
-          FieldValue.arrayRemove([Convertion().ChangeStringToInt(barcode)])
+      "VinylesBarcode": FieldValue.arrayRemove([barcode])
     });
   }
 }

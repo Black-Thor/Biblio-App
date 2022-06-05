@@ -1,3 +1,4 @@
+import 'package:bibliotrack/models/userModel.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,8 +14,9 @@ class UsersRepository {
     return _auth.currentUser!.uid;
   }
 
-  Future getCurrentUser() async {
-    return (await _getCurrentUserDocumentReference()).get();
+  Future<AuthenticatedUser> getCurrentUser() async {
+    var user = await (await _getCurrentUserDocumentReference()).get();
+    return AuthenticatedUser.fromDocumentSnapshot(user);
   }
 
   Future<void> updateCurrentUser(Map<String, Object?> data) async {
@@ -39,8 +41,16 @@ class UsersRepository {
 
   Future addUser({required uid, required String username}) {
     return _store
+        .collection("users")
         .doc(uid)
-        .set({'uid': uid, 'username': username})
+        .set({
+          'uid': uid,
+          'username': username,
+          "BookBarcode": [],
+          "BookWish": [],
+          "VinylesBarcode": [],
+          "VinylesWish": []
+        })
         .then((value) => print("data Added"))
         .catchError((error) => print("Failed to add user: $error"));
   }

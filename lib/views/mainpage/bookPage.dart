@@ -27,6 +27,7 @@ class _BookPageState extends State<BookPage> {
     AuthenticationHelper().userInfo();
   }
 
+  void verify() {}
   void initGetBook() {
     BooksRepository()
         .getFrenchBooksOfUser()

@@ -2,6 +2,8 @@ import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/resource/message_scaffold.dart';
+import 'package:bibliotrack/resource/redirectNavigator.dart';
 import 'package:bibliotrack/views/mainpage/vinylePage.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
@@ -101,7 +103,19 @@ class WishlistVinylsDetail extends StatelessWidget {
         Material(
           color: Theme.of(context).backgroundColor,
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              WishlistRepository()
+                  .deleteVinylsFromWishlist(VinylsModel.barcode![0])
+                  .then((_) {
+                MessageScaffold().warningSnackbar(
+                    context,
+                    "👋 Adieu petit vinyl",
+                    "Ce vinyl à été retirer de votre Wishlist");
+              });
+              Future.delayed(Duration(milliseconds: 3000), () {
+                RedirectTO().RedirectTOWishlistPage(context);
+              });
+            },
             child: SizedBox(
               height: kToolbarHeight,
               width: 200,
@@ -123,16 +137,25 @@ class WishlistVinylsDetail extends StatelessWidget {
             color: Theme.of(context).primaryColor,
             child: InkWell(
               onTap: () {
-                print(VinylsModel.barcode);
-                // WishlistRepository()
-                //     .onPressedAddVinyl(VinylsModel.barcode, context);
+                WishlistRepository().addVinylBarcode(VinylsModel.barcode![0]);
+                WishlistRepository()
+                    .deleteVinylsFromWishlist(VinylsModel.barcode![0])
+                    .then((_) {
+                  MessageScaffold().warningSnackbar(
+                      context,
+                      "👋 Adieu petit vinyl",
+                      "Ce vinyl à été retirer de votre Wishlist");
+                });
+                Future.delayed(Duration(milliseconds: 3000), () {
+                  RedirectTO().RedirectTOWishlistPage(context);
+                });
               },
               child: SizedBox(
                 height: kToolbarHeight,
                 width: double.infinity,
                 child: Center(
                   child: Text(
-                    'Ajout à la wishlist',
+                    'Ajout à la bibliothéque',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).focusColor,

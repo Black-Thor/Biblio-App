@@ -2,6 +2,7 @@ import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/repositories/books_repository.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/resource/message_scaffold.dart';
 import 'package:bibliotrack/resource/redirectNavigator.dart';
 import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
@@ -104,10 +105,18 @@ class _BooksDetailState extends State<BooksDetail> {
           color: Theme.of(context).backgroundColor,
           child: InkWell(
             onTap: () {
-              BooksRepository().removeBookBarcode(
-                  context,
-                  widget.googleBookModel.volumeInfo!.industryIdentifiers![1]
-                      .identifier);
+              BooksRepository()
+                  .removeBookBarcode(BookBarcode.fromString(widget
+                      .googleBookModel
+                      .volumeInfo!
+                      .industryIdentifiers![1]
+                      .identifier))
+                  .then((_) {
+                MessageScaffold().warningSnackbar(
+                    context,
+                    "👋 Adieu petit livre",
+                    "Ce livrer à été retirer de votre bibiliothéque");
+              });
               Future.delayed(Duration(milliseconds: 3000), () {
                 RedirectTO().RedirectToBookPage(context);
               });

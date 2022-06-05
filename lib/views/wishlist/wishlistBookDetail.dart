@@ -107,7 +107,6 @@ class _WishlistBooksDetailState extends State<WishlistBooksDetail> {
                     "👋 Adieu petit livre",
                     "Ce livrer à été retirer de votre Wishlist");
               });
-              ;
               Future.delayed(Duration(milliseconds: 3000), () {
                 RedirectTO().RedirectTOWishlistPage(context);
               });
@@ -133,12 +132,21 @@ class _WishlistBooksDetailState extends State<WishlistBooksDetail> {
             color: Theme.of(context).primaryColor,
             child: InkWell(
               onTap: () {
-                WishlistRepository().onPressedAddBook(
-                    widget.googleBookModel.volumeInfo!.industryIdentifiers![1]
-                        .identifier,
+                WishlistRepository().addBookToListOfBook(
+                    BookBarcode.fromString(widget.googleBookModel.volumeInfo!
+                        .industryIdentifiers![1].identifier),
                     context);
+                WishlistRepository()
+                    .deleteBookFromWishlist(widget.googleBookModel.volumeInfo!
+                        .industryIdentifiers![1].identifier)
+                    .then((_) {
+                  MessageScaffold().successSnackbar(
+                      context,
+                      "Bienvenue petit livre 🥰 ",
+                      "Ce livrer à été ajouter dans votre liste de livre ");
+                });
                 Future.delayed(Duration(milliseconds: 3000), () {
-                  // RedirectTO().RedirectTOWishlistPage(context);
+                  RedirectTO().RedirectTOWishlistPage(context);
                 });
               },
               child: SizedBox(
