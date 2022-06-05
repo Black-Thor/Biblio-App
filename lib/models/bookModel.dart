@@ -8,11 +8,13 @@ class GoogleBooks {
     this.id,
     this.volumeInfo,
   );
-  factory GoogleBooks.fromMap(Map<String, dynamic> json) {
-    return GoogleBooks(json['etag'], json['volumeInfo']);
-  }
+
   factory GoogleBooks.fromJson(Map<String, dynamic> json) {
     return GoogleBooks(json['etag'], VolumeInfo.fromJson(json['volumeInfo']));
+  }
+
+  factory GoogleBooks.fromDynamic(dynamic value) {
+    return GoogleBooks.fromJson(value);
   }
 
   getISBN13() {
@@ -35,11 +37,6 @@ class VolumeInfo {
     this.industryIdentifiers,
   );
 
-  factory VolumeInfo.fromMap(Map<String, dynamic> json) {
-    return VolumeInfo(json['title'], json['authors'], json['publishedDate'],
-        json['description'], json['industryIdentifiers']);
-  }
-
   factory VolumeInfo.fromJson(Map<String, dynamic> json) {
     List<IndustryIdentifiers>? Identifier =
         (json["industryIdentifiers"] as List)
@@ -56,8 +53,8 @@ class VolumeInfo {
 }
 
 class IndustryIdentifiers {
-  String? type;
-  String? identifier;
+  String type;
+  String identifier;
 
   IndustryIdentifiers(this.type, this.identifier);
 
@@ -74,11 +71,6 @@ class ImageLinks {
 
   ImageLinks(this.thumbnail);
 
-  factory ImageLinks.fromMap(Map<String, dynamic> json) {
-    return ImageLinks(
-      json['thumbnail'],
-    );
-  }
   factory ImageLinks.fromJson(Map<String, dynamic> json) {
     return ImageLinks(
       json['thumbnail'],
@@ -87,37 +79,17 @@ class ImageLinks {
 }
 
 class BookBarcode {
-  final int code;
+  final String code;
 
   BookBarcode(
     this.code,
   );
 
-  factory BookBarcode.fromDynamic(dynamic barcode) {
+  factory BookBarcode.fromString(String barcode) {
     return BookBarcode(barcode);
   }
 
-  factory BookBarcode.fromString(String barcode) {
-    return BookBarcode(Convertion().ChangeStringToInt(barcode));
-  }
-}
-
-class BarcodeCollection extends Iterable {
-  final Iterable<BookBarcode> _barcodeCollection;
-
-  BarcodeCollection(this._barcodeCollection);
-
-  factory BarcodeCollection.fromDynamicList(Iterable<dynamic> barcodes) {
-    return BarcodeCollection(barcodes.map(BookBarcode.fromDynamic));
-  }
-
-  @override
-  String toString() {
-    return _barcodeCollection.join(',');
-  }
-
-  @override
-  Iterator get iterator {
-    throw UnimplementedError();
+  factory BookBarcode.fromDynamic(dynamic barcode) {
+    return BookBarcode.fromString(barcode);
   }
 }

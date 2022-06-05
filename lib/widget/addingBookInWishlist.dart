@@ -6,6 +6,7 @@ import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/resource/convertion.dart';
 import 'package:bibliotrack/resource/message_scaffold.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/resource/redirectNavigator.dart';
 import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:bibliotrack/views/wishlist/wishlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,8 +44,7 @@ class _AddBookInWishlistState extends State<AddBookInWishlist> {
     });
     var hasBarCode = _scanBookBarcode.isNotEmpty && _scanBookBarcode != "-1";
     if (hasBarCode) {
-      await WishlistRepository().addBookInWishlistFromBarcode(
-          BookBarcode.fromString(_scanBookBarcode));
+      WishlistRepository().addBookBarcodeWithCam(_scanBookBarcode);
     }
   }
 
@@ -59,9 +59,6 @@ class _AddBookInWishlistState extends State<AddBookInWishlist> {
     ),
     Tab(
       text: 'mot',
-    ),
-    Tab(
-      text: ' Manuelle',
     ),
   ];
 
@@ -139,16 +136,11 @@ class _AddBookInWishlistState extends State<AddBookInWishlist> {
                                   child: ElevatedButton.icon(
                                     icon: Icon(Icons.camera_alt_outlined),
                                     label: Text('Scan Code Bar'),
-                                    onPressed: () {
-                                      scanBarcodeNormal();
-                                      Navigator.pushAndRemoveUntil<void>(
-                                          context,
-                                          MaterialPageRoute<void>(
-                                              builder: (BuildContext context) =>
-                                                  WishList()),
-                                          ModalRoute.withName('/'));
+                                    onPressed: () async {
+                                      await scanBarcodeNormal();
+                                      RedirectTO()
+                                          .RedirectTOWishlistPage(context);
                                     },
-                                    //child: const Text('Scan du code bar'),
                                     style: ElevatedButton.styleFrom(
                                         primary:
                                             Theme.of(context).indicatorColor,
@@ -165,29 +157,21 @@ class _AddBookInWishlistState extends State<AddBookInWishlist> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                TextField(),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    onPressed: null,
-                                    child: const Text('Recherche'),
-                                    style: ElevatedButton.styleFrom(
-                                        primary:
-                                            Theme.of(context).indicatorColor,
-                                        fixedSize: const Size(200, 50),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50))),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Auteur',
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextField(),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Nom du livre',
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ElevatedButton(

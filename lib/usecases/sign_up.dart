@@ -9,6 +9,7 @@ class SignUpUseCase {
         email: email,
         password: password,
       );
+      
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;

@@ -12,3 +12,10 @@ class GoogleApiConstants {
   static String searchEndPoint = 'volumes?q=isbn:';
   static String auth = '&token=${dotenv.env['KEY_API_BOOK']}';
 }
+
+class GoogleApiConstantsForBookName {
+  static String baseUrl = 'https://www.googleapis.com/books/v1/';
+  static String searchEndPoint = 'volumes?q=';
+  static String author = '+inauthor:';
+  static String auth = '&token=${dotenv.env['KEY_API_BOOK']}';
+}

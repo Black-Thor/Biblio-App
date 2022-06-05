@@ -3,6 +3,8 @@ import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/vinyls_repository.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/resource/message_scaffold.dart';
+import 'package:bibliotrack/resource/redirectNavigator.dart';
 import 'package:bibliotrack/views/MainPage/vinylePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,7 +27,6 @@ class _AddVinylInWishlistState extends State<AddVinylInWishlist> {
 
   Future<void> scanBarcodeNormal() async {
     String bookbarcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       bookbarcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#00ccbb', 'Cancel', true, ScanMode.BARCODE);
@@ -38,11 +39,10 @@ class _AddVinylInWishlistState extends State<AddVinylInWishlist> {
     setState(() {
       _scanBookBarcode = bookbarcodeScanRes;
     });
-    if (_scanBookBarcode.isNotEmpty && _scanBookBarcode != "-1") {
-      var myInt = int.parse(_scanBookBarcode);
-      assert(myInt is int);
+    var hasBarCode = _scanBookBarcode.isNotEmpty && _scanBookBarcode != "-1";
 
-      VinylsRepository().addVinylBarcode(myInt);
+    if (hasBarCode) {
+      WishlistRepository().addVinylBarcodeWithCam(_scanBookBarcode);
     }
   }
 
@@ -53,13 +53,10 @@ class _AddVinylInWishlistState extends State<AddVinylInWishlist> {
 
   final List<Tab> myTabs = <Tab>[
     Tab(
-      text: 'ISBN ',
+      text: 'Code bare',
     ),
     Tab(
       text: 'mot',
-    ),
-    Tab(
-      text: ' Manuelle',
     ),
   ];
 
@@ -91,8 +88,8 @@ class _AddVinylInWishlistState extends State<AddVinylInWishlist> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 TextField(
-                                  controller: myController,
                                   keyboardType: TextInputType.number,
+                                  controller: myController,
                                   style: TextStyle(
                                     fontSize: 15.0,
                                     height: 3.0,
@@ -103,14 +100,24 @@ class _AddVinylInWishlistState extends State<AddVinylInWishlist> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       try {
-                                        VinylsRepository()
-                                            .addVinylBarcode(myController.text);
+                                        if (myController.text.isEmpty) {
+                                          MessageScaffold().messageToSnackBar(
+                                              context,
+                                              "Please Enter some value");
+                                        } else {
+                                          VinylsRepository()
+                                              .addVinylInWishlistBarcode(
+                                                  myController.text);
+
+                                          Navigator.pop(context);
+                                          RedirectTO()
+                                              .RedirectTOWishlistPage(context);
+                                        }
                                       } catch (error) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
                                                 content: Text('${error}')));
                                       }
-                                      Navigator.pop(context);
                                     },
                                     child: const Text('Ajouter'),
                                     style: ElevatedButton.styleFrom(
@@ -127,14 +134,10 @@ class _AddVinylInWishlistState extends State<AddVinylInWishlist> {
                                   child: ElevatedButton.icon(
                                     icon: Icon(Icons.camera_alt_outlined),
                                     label: Text('Scan vinyle Code Bar'),
-                                    onPressed: () {
-                                      scanBarcodeNormal();
-                                      Navigator.pushAndRemoveUntil<void>(
-                                          context,
-                                          MaterialPageRoute<void>(
-                                              builder: (BuildContext context) =>
-                                                  VinylePage()),
-                                          ModalRoute.withName('/'));
+                                    onPressed: () async {
+                                      await scanBarcodeNormal();
+                                      RedirectTO()
+                                          .RedirectTOWishlistPage(context);
                                     },
                                     style: ElevatedButton.styleFrom(
                                         primary:
@@ -152,37 +155,21 @@ class _AddVinylInWishlistState extends State<AddVinylInWishlist> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                TextField(),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    // onPressed: () {
-                                    //   Navigator.pushAndRemoveUntil<void>(
-                                    //       context,
-                                    //       MaterialPageRoute<void>(
-                                    //           builder: (BuildContext context) =>
-                                    //               VinylePage()),
-                                    //       ModalRoute.withName('/'));
-                                    // },
-                                    onPressed: null,
-                                    child: const Text('Recherche'),
-                                    style: ElevatedButton.styleFrom(
-                                        primary:
-                                            Theme.of(context).indicatorColor,
-                                        fixedSize: const Size(200, 50),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50))),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Artiste',
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextField(),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Album',
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ElevatedButton(

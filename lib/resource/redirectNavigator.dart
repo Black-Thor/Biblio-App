@@ -1,3 +1,4 @@
+import 'package:bibliotrack/views/mainpage/vinylePage.dart';
 import 'package:flutter/material.dart';
 
 import '../views/mainpage/bookPage.dart';
@@ -8,6 +9,14 @@ class RedirectTO {
     Navigator.pushAndRemoveUntil<void>(
       context,
       MaterialPageRoute<void>(builder: (BuildContext context) => BookPage()),
+      ModalRoute.withName('/'),
+    );
+  }
+
+  RedirectToVinylPage(context) {
+    Navigator.pushAndRemoveUntil<void>(
+      context,
+      MaterialPageRoute<void>(builder: (BuildContext context) => VinylePage()),
       ModalRoute.withName('/'),
     );
   }

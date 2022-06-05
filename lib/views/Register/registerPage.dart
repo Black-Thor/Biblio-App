@@ -14,7 +14,7 @@ class RegistrationPage extends StatefulWidget {
 
 final email = TextEditingController();
 final password = TextEditingController();
-final nickName = TextEditingController();
+final username = TextEditingController();
 
 class _RegistrationPageState extends State<RegistrationPage> {
   @override
@@ -53,7 +53,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 children: <Widget>[
                   TextField(
                     controller: email,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: 'EMAIL',
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
@@ -67,7 +67,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   SizedBox(height: 10.0),
                   TextField(
                     controller: password,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: 'PASSWORD ',
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
@@ -79,9 +79,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
-                    controller: nickName,
+                    controller: username,
                     decoration: const InputDecoration(
-                        labelText: 'NICK NAME ',
+                        labelText: 'USERNAME',
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.bold,
@@ -106,7 +106,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     builder: (context) => BookPage()));
                           },
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               SignUpUseCase()
                                   .signUp(
                                       email: email.text,
@@ -115,11 +115,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 if (result == null) {
                                   var user =
                                       await FirebaseAuth.instance.currentUser!;
-                                  var uid = user.uid;
-                                  print(uid);
                                   UsersRepository().addUser(
-                                      uid: uid,
-                                      username: nickName.text.toString());
+                                      uid: user.uid,
+                                      username: username.text.toString());
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(

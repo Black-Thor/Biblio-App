@@ -12,7 +12,7 @@ import 'package:bibliotrack/views/mainpage/bookPageDetail.dart';
 import 'package:bibliotrack/views/mainpage/vinyleDetail.dart';
 import 'package:bibliotrack/views/wishlist/wishlistBookDetail.dart';
 import 'package:bibliotrack/views/wishlist/wishlistVinyleDetail.dart';
-import 'package:bibliotrack/widget/addinVinylInWishlist.dart';
+import 'package:bibliotrack/widget/addingVinylInWishlist.dart';
 import 'package:bibliotrack/widget/addingBookButton.dart';
 import 'package:bibliotrack/widget/addingBookInWishlist.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';

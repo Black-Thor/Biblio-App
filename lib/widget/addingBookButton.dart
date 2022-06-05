@@ -1,4 +1,5 @@
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/books_repository.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
@@ -23,7 +24,9 @@ class addButtonBook extends StatefulWidget {
 
 class _addButtonBookState extends State<addButtonBook> {
   String _scanBookBarcode = '';
-  final myController = TextEditingController();
+  final isbnController = TextEditingController();
+  final AuthorController = TextEditingController();
+  final BookNameController = TextEditingController();
 
   Future<void> scanBarcodeNormal() async {
     String bookbarcodeScanRes;
@@ -41,13 +44,14 @@ class _addButtonBookState extends State<addButtonBook> {
     });
     var hasBarCode = _scanBookBarcode.isNotEmpty && _scanBookBarcode != "-1";
     if (hasBarCode) {
-      int bookbarcode = Convertion().ChangeStringToInt(_scanBookBarcode);
-      await BooksRepository().addBookBarcode(bookbarcode);
+      BooksRepository().addBookBarcodeWithCam(_scanBookBarcode);
     }
   }
 
   void dispose() {
-    myController.dispose();
+    isbnController.dispose();
+    AuthorController.dispose();
+    BookNameController.dispose();
     super.dispose();
   }
 
@@ -89,7 +93,7 @@ class _addButtonBookState extends State<addButtonBook> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 TextField(
-                                  controller: myController,
+                                  controller: isbnController,
                                   keyboardType: TextInputType.number,
                                   style: TextStyle(
                                     fontSize: 15.0,
@@ -100,15 +104,23 @@ class _addButtonBookState extends State<addButtonBook> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      if (myController.text.isEmpty) {
-                                        MessageScaffold().messageToSnackBar(
-                                            context, "Please Enter some value");
-                                      } else {
-                                        BooksRepository()
-                                            .addBookBarcode(myController.text);
-                                        Navigator.pop(context);
-                                        RedirectTO()
-                                            .RedirectToBookPage(context);
+                                      try {
+                                        if (isbnController.text.isEmpty) {
+                                          MessageScaffold().messageToSnackBar(
+                                              context,
+                                              "Please Enter some value");
+                                        } else {
+                                          BooksRepository().addBookBarcode(
+                                              BookBarcode.fromString(
+                                                  isbnController.text));
+                                          Navigator.pop(context);
+                                          RedirectTO()
+                                              .RedirectToBookPage(context);
+                                        }
+                                      } catch (error) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text('${error}')));
                                       }
                                     },
                                     child: const Text('Ajouter'),
@@ -126,9 +138,16 @@ class _addButtonBookState extends State<addButtonBook> {
                                   child: ElevatedButton.icon(
                                     icon: Icon(Icons.camera_alt_outlined),
                                     label: Text('Scan Code Bar'),
-                                    onPressed: () {
-                                      scanBarcodeNormal();
-                                      RedirectTO().RedirectToBookPage(context);
+                                    onPressed: () async {
+                                      try {
+                                        await scanBarcodeNormal();
+                                        RedirectTO()
+                                            .RedirectToBookPage(context);
+                                      } catch (error) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text('${error}')));
+                                      }
                                     },
                                     //child: const Text('Scan du code bar'),
                                     style: ElevatedButton.styleFrom(
@@ -148,6 +167,7 @@ class _addButtonBookState extends State<addButtonBook> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 TextField(
+                                  controller: AuthorController,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'Auteur',
@@ -157,6 +177,7 @@ class _addButtonBookState extends State<addButtonBook> {
                                   height: 15,
                                 ),
                                 TextField(
+                                  controller: BookNameController,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'Nom du livre',
@@ -166,6 +187,24 @@ class _addButtonBookState extends State<addButtonBook> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: ElevatedButton(
                                     onPressed: null,
+                                    // onPressed: () {
+                                    //   String? replaceWhitespacesUsingRegex(
+                                    //       String s, String replace) {
+                                    //     if (s == null) {
+                                    //       return null;
+                                    //     }
+                                    //     final pattern = RegExp('\\s+');
+                                    //     return s.replaceAll(pattern, replace);
+                                    //   }
+
+                                    //   String? S1 = replaceWhitespacesUsingRegex(
+                                    //       BookNameController.text, '+');
+                                    //   String? S2 = replaceWhitespacesUsingRegex(
+                                    //       AuthorController.text, '+');
+
+                                    //   BooksRepository()
+                                    //       .findBooksByName(S1!, S2!);
+                                    // },
                                     child: const Text('Recherche'),
                                     style: ElevatedButton.styleFrom(
                                         primary:

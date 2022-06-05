@@ -1,12 +1,9 @@
-import 'package:barcode_widget/barcode_widget.dart';
-import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/vinyls_repository.dart';
-import 'package:bibliotrack/repositories/wishlist_repository.dart';
-import 'package:bibliotrack/repositories/users_repository.dart';
+
+import 'package:bibliotrack/resource/message_scaffold.dart';
+import 'package:bibliotrack/resource/redirectNavigator.dart';
 import 'package:bibliotrack/views/MainPage/vinylePage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -20,11 +17,11 @@ class addViynylsButton extends StatefulWidget {
 
 class _addButtonState extends State<addViynylsButton> {
   String _scanBookBarcode = '';
-  final myController = TextEditingController();
-
+  final isbnController = TextEditingController();
+  final catnoController = TextEditingController();
   Future<void> scanBarcodeNormal() async {
     String bookbarcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
+
     try {
       bookbarcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#00ccbb', 'Cancel', true, ScanMode.BARCODE);
@@ -38,15 +35,12 @@ class _addButtonState extends State<addViynylsButton> {
       _scanBookBarcode = bookbarcodeScanRes;
     });
     if (_scanBookBarcode.isNotEmpty && _scanBookBarcode != "-1") {
-      var myInt = int.parse(_scanBookBarcode);
-      assert(myInt is int);
-
-      VinylsRepository().addVinylBarcode(myInt);
+      VinylsRepository().addVinylBarcode(_scanBookBarcode);
     }
   }
 
   void dispose() {
-    myController.dispose();
+    isbnController.dispose();
     super.dispose();
   }
 
@@ -85,7 +79,7 @@ class _addButtonState extends State<addViynylsButton> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 TextField(
-                                  controller: myController,
+                                  controller: isbnController,
                                   keyboardType: TextInputType.number,
                                   style: TextStyle(
                                     fontSize: 15.0,
@@ -97,18 +91,22 @@ class _addButtonState extends State<addViynylsButton> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       try {
-                                        var myInt =
-                                            int.parse(myController.text);
-                                        assert(myInt is int);
-                                        VinylsRepository()
-                                            .addVinylBarcode(myInt);
+                                        if (isbnController.text.isEmpty) {
+                                          MessageScaffold().messageToSnackBar(
+                                              context,
+                                              "Please Enter some value");
+                                        } else {
+                                          VinylsRepository().addVinylBarcode(
+                                              isbnController.text);
+                                          Navigator.pop(context);
+                                          RedirectTO()
+                                              .RedirectToVinylPage(context);
+                                        }
                                       } catch (error) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    'Veillez saisir une valeur')));
+                                                content: Text('${error}')));
                                       }
-                                      Navigator.pop(context);
                                     },
                                     child: const Text('Ajouter'),
                                     style: ElevatedButton.styleFrom(
@@ -125,14 +123,16 @@ class _addButtonState extends State<addViynylsButton> {
                                   child: ElevatedButton.icon(
                                     icon: Icon(Icons.camera_alt_outlined),
                                     label: Text('Scan vinyle Code Bar'),
-                                    onPressed: () {
-                                      scanBarcodeNormal();
-                                      Navigator.pushAndRemoveUntil<void>(
-                                          context,
-                                          MaterialPageRoute<void>(
-                                              builder: (BuildContext context) =>
-                                                  VinylePage()),
-                                          ModalRoute.withName('/'));
+                                    onPressed: () async {
+                                      try {
+                                        await scanBarcodeNormal();
+                                        RedirectTO()
+                                            .RedirectToVinylPage(context);
+                                      } catch (error) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text('${error}')));
+                                      }
                                     },
                                     style: ElevatedButton.styleFrom(
                                         primary:
@@ -150,19 +150,36 @@ class _addButtonState extends State<addViynylsButton> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                TextField(),
+                                TextField(
+                                  controller: catnoController,
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                    height: 3.0,
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ElevatedButton(
-                                    // onPressed: () {
-                                    //   Navigator.pushAndRemoveUntil<void>(
-                                    //       context,
-                                    //       MaterialPageRoute<void>(
-                                    //           builder: (BuildContext context) =>
-                                    //               VinylePage()),
-                                    //       ModalRoute.withName('/'));
-                                    // },
                                     onPressed: null,
+                                    // onPressed: () {
+                                    //   try {
+                                    //     if (catnoController.text.isEmpty) {
+                                    //       MessageScaffold().messageToSnackBar(
+                                    //           context,
+                                    //           "Please Enter some value");
+                                    //     } else {
+                                    //       VinylsRepository().addVinylBarcode(
+                                    //           catnoController.text);
+                                    //       Navigator.pop(context);
+                                    //       RedirectTO()
+                                    //           .RedirectToVinylPage(context);
+                                    //     }
+                                    //   } catch (error) {
+                                    //     ScaffoldMessenger.of(context)
+                                    //         .showSnackBar(SnackBar(
+                                    //             content: Text('${error}')));
+                                    //   }
+                                    // },
                                     child: const Text('Recherche'),
                                     style: ElevatedButton.styleFrom(
                                         primary:
@@ -176,28 +193,6 @@ class _addButtonState extends State<addViynylsButton> {
                               ],
                             ),
                           ),
-                          // Container(
-                          //   child: Column(
-                          //     mainAxisAlignment: MainAxisAlignment.end,
-                          //     children: [
-                          //       TextField(),
-                          //       Padding(
-                          //         padding: const EdgeInsets.all(8.0),
-                          //         child: ElevatedButton(
-                          //           onPressed: () {},
-                          //           child: const Text('Recherche'),
-                          //           style: ElevatedButton.styleFrom(
-                          //               primary:
-                          //                   Theme.of(context).indicatorColor,
-                          //               fixedSize: const Size(200, 50),
-                          //               shape: RoundedRectangleBorder(
-                          //                   borderRadius:
-                          //                       BorderRadius.circular(50))),
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
