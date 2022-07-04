@@ -1,9 +1,11 @@
-import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/views/bookPage/bookPage.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/usecases/sign_up.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils/firestore.dart';
+import '../../widget/currentUsername.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -12,7 +14,7 @@ class RegistrationPage extends StatefulWidget {
 
 final email = TextEditingController();
 final password = TextEditingController();
-final nickName = TextEditingController();
+final username = TextEditingController();
 
 class _RegistrationPageState extends State<RegistrationPage> {
   @override
@@ -51,7 +53,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 children: <Widget>[
                   TextField(
                     controller: email,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: 'EMAIL',
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
@@ -65,7 +67,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   SizedBox(height: 10.0),
                   TextField(
                     controller: password,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: 'PASSWORD ',
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
@@ -77,9 +79,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
-                    controller: nickName,
+                    controller: username,
                     decoration: const InputDecoration(
-                        labelText: 'NICK NAME ',
+                        labelText: 'USERNAME',
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.bold,
@@ -104,8 +106,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     builder: (context) => BookPage()));
                           },
                           child: ElevatedButton(
-                            onPressed: () {
-                              AuthenticationHelper()
+                            onPressed: () async {
+                              SignUpUseCase()
                                   .signUp(
                                       email: email.text,
                                       password: password.text)
@@ -113,11 +115,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 if (result == null) {
                                   var user =
                                       await FirebaseAuth.instance.currentUser!;
-                                  var uid = user.uid;
-                                  print(uid);
-                                  CollectionHelper().addUser(
-                                      uid: uid,
-                                      username: nickName.text.toString());
+                                  UsersRepository().addUser(
+                                      uid: user.uid,
+                                      username: username.text.toString());
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(

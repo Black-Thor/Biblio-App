@@ -1,19 +1,26 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/resource/apiConstants.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bibliotrack/resource/convertion.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/resource/message_scaffold.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 
 List<GoogleBooks> parseProducts(String responseBody) {
   final parsed = json.decode(responseBody);
-  return parsed["items"]
-      .map<GoogleBooks>((json) => GoogleBooks.fromJson(json))
-      .toList();
+  return parsed["items"].map<GoogleBooks>(GoogleBooks.fromDynamic).toList();
 }
 
-class ApiServiceBook {
+class BooksRepository {
+  UsersRepository usersRepository = UsersRepository();
+
+  Future<GoogleBooks> findBookByBarcode(BookBarcode barcode) async {
+    var booksFinded = await findBooksByBarcode(barcode);
+    return booksFinded.first;
+  }
+
   Future<List<GoogleBooks>> findBooksByBarcode(BookBarcode barcode) async {
     var url = Uri.parse(GoogleApiConstants.baseUrl +
         GoogleApiConstants.searchEndPoint +
@@ -26,6 +33,8 @@ class ApiServiceBook {
     }
     throw new Exception('Some arbitrary error');
   }
+
+
 
   Future<List<GoogleBooks>> findBooksByBarcodes(
       List<BookBarcode> barcodes) async {
@@ -51,6 +60,33 @@ class ApiServiceBook {
         ...previousBooks,
         currentBook,
       ];
+    });
+  }
+
+  Future<List<GoogleBooks>> getFrenchBooksOfUser() async {
+    final list = await BooksRepository().findBookBarcodesOfUser();
+    return await getFrenchBooks(list);
+  }
+
+  Future<List<BookBarcode>> findBookBarcodesOfUser() async {
+    return (await usersRepository.getCurrentUser()).bookBarcodes;
+  }
+
+  Future<void> addBookBarcode(BookBarcode barcode) async {
+    return usersRepository.updateCurrentUser({
+      "BookBarcode": FieldValue.arrayUnion([barcode.code])
+    });
+  }
+
+  Future<void> addBookBarcodeWithCam(barcode) async {
+    return usersRepository.updateCurrentUser({
+      "BookBarcode": FieldValue.arrayUnion([barcode])
+    });
+  }
+
+  Future<void> removeBookBarcode(BookBarcode barcode) async {
+    return usersRepository.updateCurrentUser({
+      "BookBarcode": FieldValue.arrayRemove([barcode.code])
     });
   }
 }

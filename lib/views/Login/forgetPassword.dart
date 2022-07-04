@@ -1,5 +1,6 @@
-import 'package:bibliotrack/utils/firebase.dart';
-import 'package:bibliotrack/views/bookPage/bookPage.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
+import 'package:bibliotrack/usecases/passwordReset.dart';
+import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -75,7 +76,7 @@ class _forgetPasswordState extends State<forgetPassword> {
                             elevation: 7.0,
                             child: ElevatedButton(
                               onPressed: () {
-                                AuthenticationHelper()
+                                PasswordResetButton()
                                     .passwordReset(emailToReset.text, context);
                               },
                               child: Text(

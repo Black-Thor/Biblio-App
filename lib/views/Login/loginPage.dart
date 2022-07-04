@@ -1,11 +1,12 @@
 import 'dart:developer';
 
-import 'package:bibliotrack/utils/firebase.dart';
+import 'package:bibliotrack/usecases/sign_in.dart';
+import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/views/Login/forgetPasswordLink.dart';
 import 'package:bibliotrack/views/Login/input.dart';
 import 'package:bibliotrack/views/Login/emailTextField.dart';
 import 'package:bibliotrack/views/Login/forgetPassword.dart';
-import 'package:bibliotrack/views/bookPage/bookPage.dart';
+import 'package:bibliotrack/views/mainpage/bookPage.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    // TODO: rename this to AuthenticationGuard.redirectIfUserIsLogged()
     AuthenticationHelper().Logged(context);
   }
 
@@ -54,7 +55,6 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ...welcome(constraints),
-                  // input(emailTextField(), constraints),
                   Input(
                       constraints: constraints,
                       textField:
@@ -129,11 +129,7 @@ welcome(constraints) {
 }
 
 submitLoginForm(String email, String password, BuildContext context) {
-  // Get username and password from the user.Pass the data to
-  // helper method
-  AuthenticationHelper()
-      .signIn(email: email, password: password)
-      .then((result) {
+  SignInUseCase().signIn(email: email, password: password).then((result) {
     if (result == null) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => BookPage()));
