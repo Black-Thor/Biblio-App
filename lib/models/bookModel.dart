@@ -28,6 +28,8 @@ class VolumeInfo {
   final String? publishedDate;
   final String? description;
   List<IndustryIdentifiers>? industryIdentifiers;
+  final int? pageCount;
+  final int? averageRating;
 
   VolumeInfo(
     this.title,
@@ -35,6 +37,8 @@ class VolumeInfo {
     this.publishedDate,
     this.description,
     this.industryIdentifiers,
+    this.pageCount,
+    this.averageRating,
   );
 
   factory VolumeInfo.fromJson(Map<String, dynamic> json) {
@@ -43,8 +47,15 @@ class VolumeInfo {
             .map((i) => IndustryIdentifiers.fromJson(i))
             .toList();
 
-    return VolumeInfo(json['title'], json['authors'], json['publishedDate'],
-        json['description'], Identifier);
+    return VolumeInfo(
+      json['title'],
+      json['authors'],
+      json['publishedDate'],
+      json['description'],
+      Identifier,
+      json['pageCount'],
+      json['averageRating'],
+    );
   }
 
   getISBN13() {

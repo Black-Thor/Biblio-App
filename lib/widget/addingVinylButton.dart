@@ -160,26 +160,26 @@ class _addButtonState extends State<addViynylsButton> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ElevatedButton(
-                                    onPressed: null,
-                                    // onPressed: () {
-                                    //   try {
-                                    //     if (catnoController.text.isEmpty) {
-                                    //       MessageScaffold().messageToSnackBar(
-                                    //           context,
-                                    //           "Please Enter some value");
-                                    //     } else {
-                                    //       VinylsRepository().addVinylBarcode(
-                                    //           catnoController.text);
-                                    //       Navigator.pop(context);
-                                    //       RedirectTO()
-                                    //           .RedirectToVinylPage(context);
-                                    //     }
-                                    //   } catch (error) {
-                                    //     ScaffoldMessenger.of(context)
-                                    //         .showSnackBar(SnackBar(
-                                    //             content: Text('${error}')));
-                                    //   }
-                                    // },
+                                    // onPressed: null,
+                                    onPressed: () {
+                                      try {
+                                        if (catnoController.text.isEmpty) {
+                                          MessageScaffold().messageToSnackBar(
+                                              context,
+                                              "Please Enter some value");
+                                        } else {
+                                          VinylsRepository().addVinylBarcode(
+                                              catnoController.text);
+                                          Navigator.pop(context);
+                                          RedirectTO()
+                                              .RedirectToVinylPage(context);
+                                        }
+                                      } catch (error) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text('${error}')));
+                                      }
+                                    },
                                     child: const Text('Recherche'),
                                     style: ElevatedButton.styleFrom(
                                         primary:

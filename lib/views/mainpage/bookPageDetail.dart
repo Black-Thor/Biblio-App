@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:bibliotrack/models/bookModel.dart';
+import 'package:bibliotrack/models/ratingModel.dart';
 import 'package:bibliotrack/repositories/books_repository.dart';
+import 'package:bibliotrack/repositories/rating_repository.dart';
 import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/resource/message_scaffold.dart';
@@ -9,6 +13,7 @@ import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:loading_gifs/loading_gifs.dart';
 
 class BooksDetail extends StatefulWidget {
@@ -29,6 +34,7 @@ class _BooksDetailState extends State<BooksDetail> {
     Tab(text: 'Note'),
   ];
 
+  double rating = 0;
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: myTabs.length,
@@ -85,11 +91,44 @@ class _BooksDetailState extends State<BooksDetail> {
                       max: 100,
                       label: _currentSliderValue.round().toString(),
                       onChanged: (double value) {
+                        print(widget.googleBookModel.volumeInfo!.averageRating);
+
                         setState(() {
                           _currentSliderValue = value;
                         });
                       },
-                    )
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection('Rating')
+                              .doc("BC31NtPtP4gRaDvt8XusohWM7Yq2")
+                              .get()
+                              .then((DocumentSnapshot doc) {
+                            print(doc.data());
+                          });
+                        },
+                        child: Text("test")),
+                    Text(
+                      "nombre de page : ${widget.googleBookModel.volumeInfo!.pageCount}",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    Text(
+                      "Votre note sur le livre est  : ${rating}",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    RatingBar.builder(
+                        minRating: 1,
+                        itemSize: 46,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 4),
+                        updateOnDrag: true,
+                        itemBuilder: ((context, _) => Icon(Icons.star,
+                            color: Theme.of(context).backgroundColor)),
+                        onRatingUpdate: (rating) => setState(() {
+                              this.rating = rating;
+                            })),
                   ],
                 ),
               ),

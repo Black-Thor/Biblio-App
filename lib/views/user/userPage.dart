@@ -79,12 +79,13 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       height: 55,
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
                           PasswordResetButton().passwordReset(email, context);
+                          print("hey");
                         },
                         child: const Text(
                           'Reset du mot de passe',
@@ -99,6 +100,7 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    
                   ],
                 ),
               )
