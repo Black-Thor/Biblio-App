@@ -7,7 +7,6 @@ import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/resource/message_scaffold.dart';
 import 'package:bibliotrack/resource/redirectNavigator.dart';
-import 'package:bibliotrack/views/mainpage/vinylePage.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

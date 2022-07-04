@@ -5,7 +5,6 @@ import 'package:bibliotrack/repositories/wishlist_repository.dart';
 import 'package:bibliotrack/repositories/users_repository.dart';
 import 'package:bibliotrack/resource/message_scaffold.dart';
 import 'package:bibliotrack/resource/redirectNavigator.dart';
-import 'package:bibliotrack/views/MainPage/vinylePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

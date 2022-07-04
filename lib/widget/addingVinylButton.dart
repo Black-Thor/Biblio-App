@@ -2,7 +2,6 @@ import 'package:bibliotrack/repositories/vinyls_repository.dart';
 
 import 'package:bibliotrack/resource/message_scaffold.dart';
 import 'package:bibliotrack/resource/redirectNavigator.dart';
-import 'package:bibliotrack/views/MainPage/vinylePage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
