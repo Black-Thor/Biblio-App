@@ -98,17 +98,17 @@ class _BooksDetailState extends State<BooksDetail> {
                         });
                       },
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          FirebaseFirestore.instance
-                              .collection('Rating')
-                              .doc("BC31NtPtP4gRaDvt8XusohWM7Yq2")
-                              .get()
-                              .then((DocumentSnapshot doc) {
-                            print(doc.data());
-                          });
-                        },
-                        child: Text("test")),
+                    // ElevatedButton(
+                    //     onPressed: () {
+                    //       FirebaseFirestore.instance
+                    //           .collection('Rating')
+                    //           .doc("BC31NtPtP4gRaDvt8XusohWM7Yq2")
+                    //           .get()
+                    //           .then((DocumentSnapshot doc) {
+                    //         print(doc.data());
+                    //       });
+                    //     },
+                    //     child: Text("test")),
                     Text(
                       "nombre de page : ${widget.googleBookModel.volumeInfo!.pageCount}",
                       style:
