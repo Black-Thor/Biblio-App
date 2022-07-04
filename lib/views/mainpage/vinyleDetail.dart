@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bibliotrack/models/bookModel.dart';
 import 'package:bibliotrack/models/vinyleModel.dart';
 import 'package:bibliotrack/repositories/vinyls_repository.dart';
@@ -9,25 +11,51 @@ import 'package:bibliotrack/views/mainpage/vinylePage.dart';
 import 'package:bibliotrack/widget/homeAppBar.dart';
 import 'package:bibliotrack/widget/sideBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:loading_gifs/loading_gifs.dart';
 
-class VinylsDetail extends StatelessWidget {
+class VinylsDetail extends StatefulWidget {
   VinylsDetail({Key? key, index, required this.VinylsModel}) : super(key: key);
+  @override
+  final Discogs VinylsModel;
+
+  @override
+  State<VinylsDetail> createState() => _VinylsDetailState();
+}
+
+class _VinylsDetailState extends State<VinylsDetail> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  late List<Discogs> _discogsModel = [];
+
   final List<Tab> myTabs = <Tab>[
     const Tab(text: 'Detail'),
     const Tab(text: 'Note'),
   ];
 
+  double rating = 0;
+
   @override
-  final Discogs VinylsModel;
+  void initState() {
+    super.initState();
+    initGetVinyl();
+  }
+
+  void initGetVinyl() {
+    VinylsRepository()
+        .getFrenchVinylsOfUser()
+        .then((vinyls) => setState(() => _discogsModel = vinyls))
+        .catchError(
+            (error) => MessageScaffold().messageToSnackBar(context, error));
+  }
+
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: myTabs.length,
       child: Scaffold(
           appBar: CustomAppBarDetails(
-              VinylsModel.title.toString(), myTabs, context, _key),
+              widget.VinylsModel.title.toString(), myTabs, context, _key),
           bottomNavigationBar: detailsButton(context),
           body: TabBarView(
             children: <Widget>[
@@ -40,28 +68,23 @@ class VinylsDetail extends StatelessWidget {
                       fadeInCurve: Curves.bounceIn,
                       fit: BoxFit.cover,
                       placeholder: circularProgressIndicator,
-                      image: VinylsModel.coverImage.toString(),
+                      image: widget.VinylsModel.coverImage.toString(),
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     Text(
-                      VinylsModel.barcode.toString(),
+                      widget.VinylsModel.country.toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     Text(
-                      VinylsModel.country.toString(),
+                      widget.VinylsModel.year.toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     Text(
-                      VinylsModel.year.toString(),
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                    Text(
-                      VinylsModel.genre.toString(),
+                      widget.VinylsModel.genre.toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -75,20 +98,35 @@ class VinylsDetail extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      VinylsModel.country.toString(),
+                      widget.VinylsModel.country.toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     Text(
-                      VinylsModel.year.toString(),
+                      widget.VinylsModel.year.toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     Text(
-                      VinylsModel.genre.toString(),
+                      widget.VinylsModel.genre.toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
+                    Text(
+                      "Votre note sur le vinyl est  : ${rating}",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    RatingBar.builder(
+                        minRating: 1,
+                        itemSize: 46,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 4),
+                        updateOnDrag: true,
+                        itemBuilder: ((context, _) => Icon(Icons.star,
+                            color: Theme.of(context).backgroundColor)),
+                        onRatingUpdate: (rating) => setState(() {
+                              this.rating = rating;
+                            })),
                   ],
                 ),
               ),
@@ -96,6 +134,36 @@ class VinylsDetail extends StatelessWidget {
           )),
     );
   }
+
+  verification() {
+    for (int i = 0; i < _discogsModel.length; i++) {
+      final vinylbarcode = widget.VinylsModel.barcode![0].replaceAll(' ', '');
+      final index1 = _discogsModel[i].barcode?.indexOf(vinylbarcode);
+      if (index1 != -1) {
+        final index2 = _discogsModel[i]
+            .barcode
+            ?.indexOf(widget.VinylsModel.barcode![0].replaceAll(' ', ''));
+        return _discogsModel[i].barcode![index2 as int];
+      }
+    }
+  }
+
+  // verificationcatno() {
+  //   var catno;
+  //   widget.VinylsModel.barcode!.forEach((element) {
+  //     for (int i = 0; i < _discogsModel.length; i++) {
+  //       final index1 = _discogsModel[i].barcode?.indexOf(element);
+
+  //       if (index1 != -1) {
+  //         final index2 = _discogsModel[i].barcode?.indexOf(element);
+  //         print(_discogsModel[i].barcode![index2 as int]);
+  //         catno = _discogsModel[i].barcode![index2 as int];
+  //         break;
+  //       }
+  //     }
+  //   });
+  //   print("catno $catno");
+  // }
 
   Row detailsButton(context) {
     return Row(
@@ -105,9 +173,10 @@ class VinylsDetail extends StatelessWidget {
           child: InkWell(
             onTap: () {
               try {
-                VinylsRepository()
-                    .removeVinylBarcode(VinylsModel.barcode![0])
-                    .then((_) {
+                //  final toDeletecatno = verificationcatno();
+                final toDelete = verification();
+                print(" $toDelete");
+                VinylsRepository().removeVinylBarcode(toDelete).then((_) {
                   MessageScaffold().warningSnackbar(
                       context,
                       "👋 Adieu petit Vinyl",

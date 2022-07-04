@@ -43,21 +43,20 @@ class _CustomSideBarState extends State<CustomSideBar> {
             leading: const FaIcon(FontAwesomeIcons.book),
             title: Text('Livres'),
             onTap: () {
-              //userInfo();
               Navigator.pop(context);
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BookPage()));
             },
           ),
-          ListTile(
-            leading: const FaIcon(FontAwesomeIcons.mask),
-            title: Text('BD / Comics'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => ComicsPage()));
-            },
-          ),
+          // ListTile(
+          //   leading: const FaIcon(FontAwesomeIcons.mask),
+          //   title: Text('BD / Comics'),
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //     Navigator.of(context).pushReplacement(
+          //         MaterialPageRoute(builder: (context) => ComicsPage()));
+          //   },
+          // ),
           ListTile(
             leading: const FaIcon(FontAwesomeIcons.recordVinyl),
             title: Text('Vinyle'),
