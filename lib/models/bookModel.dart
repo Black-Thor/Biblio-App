@@ -29,7 +29,6 @@ class VolumeInfo {
   final String? description;
   List<IndustryIdentifiers>? industryIdentifiers;
   final int? pageCount;
-  final int? averageRating;
 
   VolumeInfo(
     this.title,
@@ -38,7 +37,6 @@ class VolumeInfo {
     this.description,
     this.industryIdentifiers,
     this.pageCount,
-    this.averageRating,
   );
 
   factory VolumeInfo.fromJson(Map<String, dynamic> json) {
@@ -54,7 +52,6 @@ class VolumeInfo {
       json['description'],
       Identifier,
       json['pageCount'],
-      json['averageRating'],
     );
   }
 

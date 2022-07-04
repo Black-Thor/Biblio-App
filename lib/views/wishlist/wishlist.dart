@@ -62,13 +62,13 @@ class _WishListState extends State<WishList> with TickerProviderStateMixin {
   }
 
   void _getBook() async {
-    try {
-      final list =
-          await WishlistRepository().getSavedBookInWishlistOfCurrentUser();
-      _googleBookModel = await BooksRepository().getFrenchBooks(list);
-    } catch (error) {
-      MessageScaffold().messageToSnackBar(context, error);
-    }
+    // try {
+    final list =
+        await WishlistRepository().getSavedBookInWishlistOfCurrentUser();
+    _googleBookModel = await BooksRepository().getFrenchBooks(list);
+    // } catch (error) {
+    //   MessageScaffold().messageToSnackBar(context, error);
+    // }
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
 

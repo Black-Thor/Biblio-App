@@ -91,7 +91,6 @@ class _BooksDetailState extends State<BooksDetail> {
                       max: 100,
                       label: _currentSliderValue.round().toString(),
                       onChanged: (double value) {
-                        print(widget.googleBookModel.volumeInfo!.averageRating);
 
                         setState(() {
                           _currentSliderValue = value;
