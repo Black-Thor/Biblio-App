@@ -110,7 +110,7 @@ Pour déployer l'aspect web de mon application j'utilise un pipeline de CI/CD qu
 Cette configuration me permet de crée un livrable `web` puis ce livrable est installé automatique sur la page d'hébergement `Firebase hosting`
 
 
-![Hosting](picture/hosting.png)
+![Hosting](picture/hosting.PNG)
 
 
 ## Design 
@@ -130,9 +130,9 @@ Etant donnée que les services play store sont payant j'ai opté pour la solutio
 Pour l'utiliser , il faut s'inscrire sur firebase en suivant le lien et envoyer un mail à l'auteur à cette adresse stephane857@live.fr pour obtenir l'autorisation 
 
 ## ScreenShot
-![Screen](picture/Screen1.png)
-![Screen2](picture/Screen2.png)
-![Screen3](picture/Screen3.png)
-![Screen4](picture/Screen4.png)
+![Screen](picture/Screen1.PNG)
+![Screen2](picture/Screen2.PNG)
+![Screen3](picture/Screen3.PNG)
+![Screen4](picture/Screen4.PNG)
 
 
