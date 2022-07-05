@@ -61,19 +61,57 @@ Voici la base de l'architecture de mon projet :
 Pour applique cela je me sert de **``Firebase``** pour gérer les utilisateurs et de **`Firebase Firestore`** pour Gérer leurs donnée .
 Un avantage du serverless est que les données de mes utilisateurs 
 
-
-### Navigation 
-
 ### Base de donnée 
 
 Voici la représentation de ma base de donnée 
 
 ![BDD](picture/BDD.png)
 
+## Hébergement 
+
+L'hebergement de l'application se fait sur `Firebase Hosting` , l'utilisé me permet d'avoir un environnement de production avec la version web de l'application ;
+
 ## Pipeline CI/CD
 
-
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+
+Pour déployer l'aspect web de mon application j'utilise un pipeline de CI/CD qui me permet lors de la mise à jours de mon projet de tenir le site à jours 
+
+```yml
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' 
+      - name: 'Run flutter pub get'
+        run: flutter pub get
+      - name: 'Create  .env'
+        run: |
+          touch .env
+          KEY_API_VINYL=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
+          KEY_API_BOOK=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
+          KEY_FIREBASE=AIzaSyCuRVzxLxw49YmbvjZZn1g__dXw1iMvEAY >> .env
+          cat .env  
+      - name: 'Build Web App'
+        run: flutter build web
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+             repoToken: '${{ secrets.GITHUB_TOKEN }}'
+             firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BIBLIO_55CA4 }}'
+             channelId: live
+             projectId: biblio-55ca4
+```
+
+Cette configuration me permet de crée un livrable `web` puis ce livrable est installé automatique sur la page d'hébergement `Firebase hosting`
+
+
+![Hosting](picture/hosting.png)
+
 
 ## Design 
 Le choix du théme de couleur à été élatblie en utilisant [Coolors](https://coolors.co/) qui est un outils permettant de generer des théme de couleurs pours ces projets 
@@ -91,7 +129,10 @@ Etant donnée que les services play store sont payant j'ai opté pour la solutio
 
 Pour l'utiliser , il faut s'inscrire sur firebase en suivant le lien et envoyer un mail à l'auteur à cette adresse stephane857@live.fr pour obtenir l'autorisation 
 
-### Liens vers la vidéo de Démo
-
 ## ScreenShot
+![Screen](picture/Screen1.png)
+![Screen2](picture/Screen2.png)
+![Screen3](picture/Screen3.png)
+![Screen4](picture/Screen4.png)
+
 
