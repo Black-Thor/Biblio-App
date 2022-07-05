@@ -24,6 +24,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.google.firebase.appdistribution'
 
 android {
     compileSdkVersion flutter.compileSdkVersion
@@ -54,14 +55,24 @@ android {
             multiDexEnabled true
 
     }
-
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            firebaseAppDistribution {
+                artifactType="APK"
+                signingConfig signingConfigs.debug
+                testers="stephane857@live.fr"
+            }
         }
     }
+
+    // buildTypes {
+    //     release {
+    //         // TODO: Add your own signing config for the release build.
+    //         // Signing with the debug keys for now, so `flutter run --release` works.
+    //         signingConfig signingConfigs.debug
+    //     }
+        
+    // }
 }
 
 flutter {
