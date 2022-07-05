@@ -48,7 +48,14 @@ jobs:
             java-version: '12.x'
         - uses: subosito/flutter-action@v2
           with:
-            channel: 'stable' 
+            channel: 'stable'
+        - name: 'Create  .env'
+          run: |
+            touch .env
+            KEY_API_VINYL=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
+            KEY_API_BOOK=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
+            KEY_FIREBASE=AIzaSyCuRVzxLxw49YmbvjZZn1g__dXw1iMvEAY >> .env
+            cat .env 
         - run: flutter pub get
         - run: flutter build apk --release
         - name: upload artifact to Firebase App Distribution

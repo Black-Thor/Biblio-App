@@ -37,19 +37,19 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 color: Color(0xff0092A2).withOpacity(0.35),
                 Title: "Bienvenue sur Bibliotrack",
                 subtitle:
-                    '''Bibiliotrack, \nest une application pour les passionnées de lecture''',
+                    '''Bibiliotrack, \nest une application pour les passionné.e.s de lecture''',
                 image: "assets/onboarding/onboard04.png"),
             buildPage(
                 color: Color(0xff0092A2).withOpacity(0.35),
-                Title: "Qu'elle livres ? ",
+                Title: "Quels livres ? ",
                 subtitle:
-                    '''Bibiliotrack, \nest une application pour ceux qui oublie qu'elle livres est dans leurs bibliothéque''',
+                    '''Bibiliotrack, \nest une application pour ceux qui oublient quels livres sont dans leurs bibliothèques''',
                 image: "assets/onboarding/onboard05.png"),
             buildPage(
                 color: Color(0xff0092A2).withOpacity(0.35),
                 Title: "Liberté",
                 subtitle:
-                    '''Bibiliotrack,  \nest une application pour vous aidez à ranger vos livres , mangas et même les vinyles''',
+                    '''Bibiliotrack,  \nest une application pour vous aider à ranger vos livres et vinyles''',
                 image: "assets/onboarding/onboard06.png"),
           ],
         ),
