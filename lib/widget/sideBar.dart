@@ -81,22 +81,22 @@ class _CustomSideBarState extends State<CustomSideBar> {
                   MaterialPageRoute(builder: (context) => WishList()));
             },
           ),
-          Divider(
-            thickness: 2,
-            indent: 20,
-            endIndent: 20,
-            color: Theme.of(context).dividerColor,
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () => null,
-          ),
-          ListTile(
-            leading: Icon(Icons.description),
-            title: Text('Policies'),
-            onTap: () => null,
-          ),
+          // Divider(
+          //   thickness: 2,
+          //   indent: 20,
+          //   endIndent: 20,
+          //   color: Theme.of(context).dividerColor,
+          // ),
+          // ListTile(
+          //   leading: Icon(Icons.settings),
+          //   title: Text('Settings'),
+          //   onTap: () => null,
+          // ),
+          // ListTile(
+          //   leading: Icon(Icons.description),
+          //   title: Text('Policies'),
+          //   onTap: () => null,
+          // ),
           Divider(
             thickness: 2,
             indent: 20,
