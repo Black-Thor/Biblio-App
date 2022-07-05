@@ -62,7 +62,7 @@ jobs:
           uses: wzieba/Firebase-Distribution-Github-Action@v1
           with:
             appId: biblio-55ca4
-            token: ${{ secrets.FIREBASE_TOKEN }}
+            token: 1//03yYU3tnt7qYOCgYIARAAGAMSNwF-L9IrTJd7BQkwdiJcvoigROi_5FlJC-2bstrknQX3xCRMFMXSVr3uTkrBLNZy3FllsZbaNkM
             groups: jury
             file: build/app/outputs/flutter-apk/app-release.apk
             debug: true
