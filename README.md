@@ -53,7 +53,7 @@ D’autres applications utilisant le scan du code-barre sur android .
 
 Voici la base de l'architecture de mon projet : 
 
-![Architecture](picture\Structure.png)
+![Architecture](picture/Structure.png)
 
 **Middleware** est la partie qui lie mon application et des sources de donnée disponible et gratuite , pour ce projet j'ai choisie de travailler avec **``Google play books ``** et son api qui permet un usage rapide et simple et **``Discogs``** qui est une plateforme de vente et d'achat de vinyls que j'utilise , elle autorise les utilisateur à crée des api facilement et sans restriction .
 
@@ -68,7 +68,7 @@ Un avantage du serverless est que les données de mes utilisateurs
 
 Voici la représentation de ma base de donnée 
 
-![BDD](picture\BDD.png)
+![BDD](picture/BDD.png)
 
 ## Pipeline CI/CD
 
@@ -77,7 +77,7 @@ Voici la représentation de ma base de donnée
 
 ## Design 
 Le choix du théme de couleur à été élatblie en utilisant [Coolors](https://coolors.co/) qui est un outils permettant de generer des théme de couleurs pours ces projets 
-![Color](picture\color.png)
+![Color](picture/color.png)
 
 ## Liens Utils
 
