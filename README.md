@@ -8,3 +8,9 @@ Il est parfois difficile de se retrouver dans une grande bibliothéque remplie d
 Le rôle de bibliotrack est de vous aider à vous y retrouvez .
 En permettant d'utiliser le codebar ou le code ISBN .
 
+## Technologie 
+
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
+
+### dependance 
