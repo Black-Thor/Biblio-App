@@ -72,6 +72,40 @@ Voici la représentation de ma base de données
 
 ![BDD](picture/BDD.png)
 
+### Architecture  
+
+Pour mon développement et mes refactoring, j'ai essayer de suivre le principe SOLID et architecture modulaire , c’est-à-dire que j’ai crée un code découpé en module qui ont une responsabilité unique .
+Cela se traduit dans mon code par cette arborescence : 
+
+
+ ```
+ .
+├── models
+├── repositories
+├── resource
+├── usecases
+├── views
+│   ├── Login
+│   ├── Register
+│   ├── mainpage
+│   ├── onboarding
+│   ├── user
+│   └── wishlist
+└── widget
+ ```
+
+Models : sont tous les fichiers de modélisation des données 
+
+Repositories : Est un ensemble d’action unique qui font appel aux API ou à Firebase 
+
+Ressource : Sont des ensembles de module répétitif qui permet leurs réutilisations partout dans le code 
+
+UseCases : Correspond à des actions d’utilisateur bien précise comme se connecter ou s’enregistrer 
+
+Views est découpé en plein de dossier contenant les éléments associés au développement d’une nouvelle page 
+
+Widget : est un ensemble de composant réutilisable telle que les boutons 
+
 ## Hébergement
 
 L'hébergement de l'application se fait sur `Firebase Hosting` , l'utilisé me permet d'avoir un environnement de production avec la version web de l'application ;
@@ -128,11 +162,13 @@ Le choix du thème de couleur a été établie en utilisant [Coolors](https://co
 
 Pour accéder à la version web il suffit de ce connecter à [l'url suivante](https://biblio-55ca4.firebaseapp.com/#/) .
 
-### Demande d'accès à l'apk
+### Demande d'accès à l'apk la plus récente 
 
 Étant donné que les services play store sont payants j'ai opté pour la solution [App Distribution](https://appdistribution.firebase.dev/i/9174b245f6d0f3ac). Elle me permet de gérer les différents packages et facilitée leur distribution .
 
 Pour l'utiliser , il faut s'inscrire sur firebase en suivant le lien et envoyer un mail à l'auteur à cette adresse stephane857@live.fr pour obtenir l'autorisation 
+
+Une apk est disponible dans les releases , mais n'est pas mis à jour automatiquement .
 
 ## ScreenShot
 ![Screen1](picture/Screen1.PNG)

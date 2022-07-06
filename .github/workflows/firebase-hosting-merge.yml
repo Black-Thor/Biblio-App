@@ -29,7 +29,14 @@ jobs:
           KEY_API_BOOK=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
           KEY_FIREBASE=AIzaSyCuRVzxLxw49YmbvjZZn1g__dXw1iMvEAY >> .env
           cat .env  
-
+      - name: 'Build Web App'
+        run: flutter build web
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+             repoToken: '${{ secrets.GITHUB_TOKEN }}'
+             firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BIBLIO_55CA4 }}'
+             channelId: live
+             projectId: biblio-55ca4
 
   # build_for_android:
   #     runs-on: ubuntu-latest
