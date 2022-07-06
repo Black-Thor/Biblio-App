@@ -29,42 +29,34 @@ jobs:
           KEY_API_BOOK=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
           KEY_FIREBASE=AIzaSyCuRVzxLxw49YmbvjZZn1g__dXw1iMvEAY >> .env
           cat .env  
-      - name: 'Build Web App'
-        run: flutter build web
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-             repoToken: '${{ secrets.GITHUB_TOKEN }}'
-             firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BIBLIO_55CA4 }}'
-             channelId: live
-             projectId: biblio-55ca4
 
 
-  build_for_android:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - uses: actions/setup-java@v1
-          with:
-            java-version: '12.x'
-        - uses: subosito/flutter-action@v2
-          with:
-            channel: 'stable'
-        - name: 'Create  .env'
-          run: |
-            touch .env
-            KEY_API_VINYL=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
-            KEY_API_BOOK=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
-            KEY_FIREBASE=AIzaSyCuRVzxLxw49YmbvjZZn1g__dXw1iMvEAY >> .env
-            cat .env 
-        - run: flutter pub get
-        - run: flutter build apk --release
-        - name: upload artifact to Firebase App Distribution
-          uses: wzieba/Firebase-Distribution-Github-Action@v1
-          with:
-            appId: biblio-55ca4
-            token: 1//03yYU3tnt7qYOCgYIARAAGAMSNwF-L9IrTJd7BQkwdiJcvoigROi_5FlJC-2bstrknQX3xCRMFMXSVr3uTkrBLNZy3FllsZbaNkM
-            groups: jury
-            file: build/app/outputs/flutter-apk/app-release.apk
-            debug: true
+  # build_for_android:
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@v3
+  #       - uses: actions/setup-java@v1
+  #         with:
+  #           java-version: '12.x'
+  #       - uses: subosito/flutter-action@v2
+  #         with:
+  #           channel: 'stable'
+  #       - name: 'Create  .env'
+  #         run: |
+  #           touch .env
+  #           KEY_API_VINYL=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
+  #           KEY_API_BOOK=CvhBCtXbyCyhrSHFCQhexqffsAiCsGDgsiGKLcyN >> .env
+  #           KEY_FIREBASE=AIzaSyCuRVzxLxw49YmbvjZZn1g__dXw1iMvEAY >> .env
+  #           cat .env 
+  #       - run: flutter pub get
+  #       - run: flutter build apk --release
+  #       - name: upload artifact to Firebase App Distribution
+  #         uses: wzieba/Firebase-Distribution-Github-Action@v1
+  #         with:
+  #           appId: biblio-55ca4
+  #           token: 1//03yYU3tnt7qYOCgYIARAAGAMSNwF-L9IrTJd7BQkwdiJcvoigROi_5FlJC-2bstrknQX3xCRMFMXSVr3uTkrBLNZy3FllsZbaNkM
+  #           groups: jury
+  #           file: build/app/outputs/flutter-apk/app-release.apk
+  #           debug: true
     
 
