@@ -5,8 +5,6 @@ class Convertion {
     return myInt;
   }
 
-  
-
   ChangeListToInt(List data) {
     var myInt = int.parse(data[0]);
     assert(myInt is int);
